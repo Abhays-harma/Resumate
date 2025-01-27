@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import QueryProvider from "@/context/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 
-
-const urbanist = Urbanist({ subsets: ['latin'] })
-
 export const metadata: Metadata = {
   title: "Resumate.ai",
-  description: "Create Ai powered resume",
+  description: "Create AI-powered resumes",
 };
 
 export default function RootLayout({
@@ -20,9 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning >
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={cn("bg-background", urbanist.className)}
+        className={cn("bg-background font-serif")}
+        style={{ fontFamily: "'Times New Roman', Times, serif" }}
       >
         <QueryProvider>
           <ThemeProvider

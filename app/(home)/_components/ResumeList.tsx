@@ -29,7 +29,7 @@ const ResumeList = () => {
               status={resume.status}
               updatedAt={resume.updatedAt}
               themeColor={resume.themeColor}
-              // thumbnail={resume?.thumbnail}
+              thumbnail={resume?.thumbnail}
             />
           ))}
         </>

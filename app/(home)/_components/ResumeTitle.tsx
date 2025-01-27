@@ -1,4 +1,6 @@
-import { FileText, Globe, Lock, Trash } from 'lucide-react'
+import useUpdateTitle from '@/features/use-update-title'
+import { toast } from '@/hooks/use-toast'
+import { FileText, Globe, LoaderCircle, Lock, Trash } from 'lucide-react'
 import React, { FC, useEffect, useState } from 'react'
 
 interface Props {
@@ -14,15 +16,37 @@ const ResumeTitle: FC<Props> = ({
   status,
   onSave
 }) => {
-  const [title, setTitle] = useState('Untitled Resume')
+  const [title, setTitle] = useState(initialTitle)
 
-  const handleBlur=(e:React.FocusEvent<HTMLHeadingElement>)=>{
-    const newTitle=e.target.innerText;
+  const { mutate, isPending } = useUpdateTitle()
+
+  const handleChange = (newTitle: string) => {
+    mutate({
+      newTitle: newTitle,
+    }, {
+      onSuccess: () => {
+        toast({
+          title: 'Success',
+          description: 'Updated title successfully',
+        })
+      },
+      onError: () => {
+        toast({
+          title: 'Error',
+          description: 'Error in updating title',
+        })
+      }
+    })
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLHeadingElement>) => {
+    const newTitle = e.target.innerText;
     setTitle(newTitle)
     onSave(newTitle)
+    handleChange(newTitle)
   }
-  const handleOnKeyDown=(e:React.KeyboardEvent<HTMLHeadingElement>)=>{
-    if(e.key==='Enter'){
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLHeadingElement>) => {
+    if (e.key === 'Enter') {
       e.preventDefault()
       e.currentTarget.blur()
     }
@@ -42,18 +66,23 @@ const ResumeTitle: FC<Props> = ({
         spellCheck={false}
         onBlur={handleBlur}
         onKeyDown={handleOnKeyDown}
-        
+
         className='text-[20px] px-1 font-semibold text-gray-700 dark:text-gray-300 ' >
-        {title}
+        <div className='flex justify-center items-center gap-1 ' >
+          <div>{title}</div>
+          {isPending && (
+            <LoaderCircle className='animate-spin' size='15px' />
+          )}
+        </div>
       </h5>
       <span>
         {status === 'private' ? (
           <Lock size='14px' />
         ) : status === 'public' ? (
           <Globe size='14px' />
-        ) :status === 'archived' ? (
+        ) : status === 'archived' ? (
           <Trash size='14px' />
-        ):null}
+        ) : null}
       </span>
     </div>
   )

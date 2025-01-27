@@ -11,7 +11,7 @@ export const experienceTable=pgTable("experience",{
     companyName:varchar("company_name",{length:255}),
     city:varchar("city",{length:255}),
     state:varchar("state",{length:255}),
-    currentlyWorking:boolean("currently_working").notNull(),
+    currentlyWorking:boolean("currently_working").notNull().default(false),
     workSummary:text("work_summary"),
     startDate:date("start_date"),
     endDate:date("end_date"),

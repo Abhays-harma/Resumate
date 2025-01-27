@@ -1,6 +1,5 @@
 'use client'
 import useGetDocument from "@/features/use-get-document-by-id"
-import { resumeData } from "@/lib/dummy"
 import { ResumeDataType } from "@/types/resume.type"
 import { useParams } from "next/navigation"
 import { createContext, FC, useContext, useEffect, useState } from "react"
@@ -29,9 +28,10 @@ export const ResumeInfoProvider: FC<{ children: React.ReactNode }> = ({ children
         if (isSuccess) {
             setResumeInfo(data?.data as ResumeDataType)
         }
-    }, [isSuccess,data])
+    }, [isSuccess,data,refetch])
     const onUpdate = (data: ResumeDataType) => {
         setResumeInfo(data)
+        refetch()
     }
 
     return (

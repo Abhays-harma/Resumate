@@ -1,43 +1,43 @@
 export type ExperienceType = {
-  id?: number;
-  docId?: number | null;
-  title: string | null;
-  companyName: string | null;
-  city: string | null;
-  state: string | null;
-  startDate: string | null;
-  endDate?: string | null;
+  id?: number | undefined;
+  docId?: number | undefined;
+  title: string | undefined;
+  companyName: string | undefined;
+  city: string | undefined;
+  state: string | undefined;
+  startDate: string | undefined;
+  endDate?: string | undefined;
   currentlyWorking: boolean;
-  workSummary: string | null;
+  workSummary: string | undefined;
 };
 
 export type EducationType = {
   id?: number;
-  docId?: number | null;
-  universityName: string | null;
-  startDate: string | null;
-  endDate: string | null;
-  degree: string | null;
-  major: string | null;
-  description: string | null;
+  docId?: number | undefined;
+  universityName: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+  degree: string | undefined;
+  major: string | undefined;
+  description: string | undefined;
 };
 
 export type SkillType = {
   id?: number;
-  docId?: number | null;
-  name: string | null;
+  docId?: number | undefined;
+  name: string | undefined;
   rating?: number;
 };
 
 export type PersonalInfoType = {
   id?: number;
-  docId?: number | null;
-  firstName?: string | null;
-  lastName?: string | null;
-  jobTitle?: string | null;
-  address?: string | null;
-  phone?: string | null;
-  email?: string | null;
+  docId?: number | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  jobTitle?: string | undefined;
+  address?: string | undefined;
+  phone?: string | undefined;
+  email?: string | undefined;
 };
 
 export type StatusType = "archived" | "private" | "public" | undefined;
@@ -47,13 +47,13 @@ export type ResumeDataType = {
   documentId?: string;
   title: string;
   status: StatusType;
-  thumbnail?: string | null;
-  personalInfo?: PersonalInfoType | null;
-  themeColor?: string | null;
-  currentPosition?: number | null;
-  summary: string | null;
-  experiences?: ExperienceType[] | null;
-  educations?: EducationType[] | null;
-  skills?: SkillType[] | null;
+  thumbnail?: string | undefined;
+  personalInfo?: PersonalInfoType | undefined;
+  themeColor?: string | undefined;
+  currentPosition?: number | undefined;
+  summary: string | undefined;
+  experiences?: ExperienceType[] | undefined;
+  educations?: EducationType[] | undefined;
+  skills?: SkillType[] | undefined;
   updatedAt?: string;
 };

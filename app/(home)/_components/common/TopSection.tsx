@@ -2,9 +2,12 @@ import { useResumeInfoContext } from '@/context/resume-info-provider'
 import { AlertCircle } from 'lucide-react';
 import React from 'react'
 import ResumeTitle from '../ResumeTitle';
+import ThemeColor from './ThemeColor';
+import PreviewModal from '../PreviewModal';
+import DownloadResume from '../DownloadResume';
 
 const TopSection = () => {
-    const { resumeInfo, onUpdate } = useResumeInfoContext();
+    const { resumeInfo, onUpdate,isLoading } = useResumeInfoContext();
     return (
         <>
             {resumeInfo?.status === 'archived' && (
@@ -13,17 +16,23 @@ const TopSection = () => {
                     This resume is in the trash bin
                 </div>
             )}
-            <div className='flex justify-between items-center w-full border-b pb-3' >
+            <div className='flex justify-between items-center w-full border-b pb-3 px-4' >
                 <div>
-                    <ResumeTitle 
-                    initialTitle={resumeInfo?.title || ''}
-                    isLoading={false}
-                    status={resumeInfo?.status}
-                    onSave={(value)=>console.log(value)}
+                    <ResumeTitle
+                        initialTitle={resumeInfo?.title || ''}
+                        isLoading={false}
+                        status={resumeInfo?.status}
+                        onSave={(value) => console.log(value)}
                     />
                 </div>
-                <div>
-                    sideOptions
+                <div className='flex justify-center items-center gap-1' >
+                    <ThemeColor />
+                    <PreviewModal />
+                    <DownloadResume
+                    title={resumeInfo?.title || 'Untitled Resume'}
+                    status={resumeInfo?.status}
+                    isLoading={isLoading}
+                    />
                 </div>
             </div>
         </>

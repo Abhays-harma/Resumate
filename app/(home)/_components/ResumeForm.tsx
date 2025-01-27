@@ -3,6 +3,10 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import React, { useState } from 'react'
 import PersonalInfoForm from './forms/PersonalInfoForm'
 import { useResumeInfoContext } from '@/context/resume-info-provider'
+import SummaryForm from './forms/SummaryForm'
+import ExperienceForm from './forms/ExperienceForm'
+import EducationForm from './forms/EducationForm'
+import SkillsForm from './forms/SkillsForm'
 
 const ResumeForm = () => {
   const [activeIndex, setactiveIndex] = useState(1)
@@ -43,7 +47,19 @@ const ResumeForm = () => {
         </div>
         <div className='py-3 px-5 pb-5'>
           {activeIndex===1 && (
-            <PersonalInfoForm />
+            <PersonalInfoForm handleNext={handleNext} />
+          )}
+          {activeIndex===2 &&(
+            <SummaryForm handleNext={handleNext} />
+          )}
+          {activeIndex===3 &&(
+            <ExperienceForm handleNext={handleNext} />
+          )}
+          {activeIndex===4 &&(
+            <EducationForm handleNext={handleNext} />
+          )}
+          {activeIndex===5 &&(
+            <SkillsForm handleNext={handleNext} />
           )}
         </div>
       </div>

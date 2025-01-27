@@ -9,11 +9,11 @@ const EducationPreview:FC<Props> = ({
     resumeInfo,
 }) => {
   return (
-    <div className='w-full my-5' >
-        <h5 style={{color:resumeInfo?.themeColor ?? 'inherit'}} className='text-center font-bold text-sm mb-2' >
+    <div className='w-full my-0' >
+        <h5 style={{color:resumeInfo?.themeColor ?? 'inherit'}} className='text-center font-bold text-sm' >
             Education
         </h5>
-        <hr className=' border-[1.5px] my-2 ' style={{borderColor:resumeInfo?.themeColor ?? 'inherit'}} />
+        <hr className=' border-[0.5px] my-1 ' style={{borderColor:resumeInfo?.themeColor ?? 'inherit'}} />
 
         <div className='flex flex-col gap-1' >
             {resumeInfo?.educations?.map((education,index)=>(
@@ -33,7 +33,7 @@ const EducationPreview:FC<Props> = ({
                             {education?.endDate}
                         </span>
                     </div>
-                    <p className=' text-[13px] my-2 '>
+                    <p className=' text-[13px] my-0 '>
                         {education?.description}
                     </p>
                 </div>

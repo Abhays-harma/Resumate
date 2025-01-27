@@ -1,15 +1,16 @@
 'use client'
-import {EllipsisVertical, FileText, Globe, Lock } from 'lucide-react'
+import { EllipsisVertical, FileText, Globe, Lock } from 'lucide-react'
 import React, { FC, useMemo } from 'react'
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface PropType {
     themeColor: string | null,
     status: 'private' | 'public' | 'archived' | null,
     documentId: string | null,
-    title: string | null,
-    // thumbnail: string | null,
+    title: string,
+    thumbnail: string | null,
     updatedAt: string | null,
 }
 
@@ -19,26 +20,38 @@ const ResumeItem: FC<PropType> = ({
     title,
     documentId,
     updatedAt,
-    // thumbnail
+    thumbnail
 }) => {
-    const router=useRouter()
-    const goToDoc=()=>{
+
+    const router = useRouter()
+    const goToDoc = () => {
         router.push(`/dashboard/documents/${documentId}/edit`)
     }
-    const docDate=useMemo(()=>{
-        if(!updatedAt)return null;
-        const formattedDate=format(updatedAt,"MMM dd,yyyy")
+    const docDate = useMemo(() => {
+        if (!updatedAt) return null;
+        const formattedDate = format(updatedAt, "MMM dd,yyyy")
         return formattedDate
-    },[updatedAt])
+    }, [updatedAt])
     return (
-        <div className='w-full max-w-[164px] h-[194px] border transition-all cursor-pointer rounded-lg shadow-primary hover:shadow-md hover:border-primary border-t-2 '
+        <div className='w-full max-w-[164px] h-[194px] border transition-all cursor-pointer rounded-lg shadow-primary hover:shadow-md hover:border-primary '
             style={{ borderColor: themeColor || "" }}
             onClick={goToDoc}
         >
             <div className='flex flex-col justify-center items-center w-full h-full bg-[#fdfdfd] rounded-lg dark:bg-secondary' >
                 <div className='flex flex-1 w-full pt-2 px-1' >
                     <div className='w-full h-full justify-center items-center flex flex-1 bg-white dark:bg-gray-700 rounded-t-lg '  >
-                        <FileText size='30px' />
+                        {thumbnail ? (
+                            <div className='w-full h-full relative rounded-t-lg overflow-hidden' >
+                                <Image
+                                    fill
+                                    src={thumbnail}
+                                    alt={title}
+                                    className='w-full h-full object-cover object-top rounded-t-lg '
+                                />
+                            </div>
+                        ) : (
+                            <FileText size='30px' />
+                        )}
                     </div>
                 </div>
                 <div className='w-full shrink border-t pt-2 px-[9px] pb-[9px] '>
