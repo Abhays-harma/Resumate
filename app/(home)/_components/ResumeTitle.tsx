@@ -40,7 +40,26 @@ const ResumeTitle: FC<Props> = ({
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLHeadingElement>) => {
-    const newTitle = e.target.innerText;
+    const newTitle = e.target.innerText.trim();
+    if (newTitle.length <= 0) {
+      toast({
+        title: 'Warning',
+        description: 'Title cannot be empty',
+        variant:'destructive'
+      });
+      e.target.innerText = title; // Reset the title to the previous value
+      return; // Prevent further execution
+    }
+    if (newTitle.length > 25) {
+      toast({
+        title: 'Warning',
+        description: 'Title cannot exceed 25 characters',
+        variant: 'destructive',
+      });
+      e.target.innerText = title; // Reset the title to the previous value
+      return;
+    }
+    if(newTitle===title)return;
     setTitle(newTitle)
     onSave(newTitle)
     handleChange(newTitle)
