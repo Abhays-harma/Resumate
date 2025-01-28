@@ -9,7 +9,7 @@ const Page = () => {
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">
       <Header />
-      <div className="w-full max-w-5xl px-6 py-16 mt-10 text-center">
+      <div className="w-full max-w-5xl px-6 pt-16 mt-10 text-center">
         <div className="flex flex-col gap-6 justify-center">
           <h1 className="text-5xl font-extrabold text-gray-800">
             Get dream jobs with our
@@ -31,16 +31,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="relative px-4 sm:px-6 lg:px-8 mb-10">
+      <div className="relative px-4 sm:px-6 lg:px-8 mt-5 mb-10">
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-primary to-blue-500 blur-3xl opacity-60 -z-10 h-full w-full"></div>
 
         {/* Image Container */}
-        <div className="relative mx-auto mt-10 w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl rounded-xl overflow-hidden shadow-lg border border-gray-200">
+        <div className="relative mx-auto w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-4xl rounded-xl overflow-hidden shadow-lg border border-gray-200">
           <Image
             src="/reumate.png"
             alt="App dashboard"
-            layout="responsive"
+            layout='responsive'
             width={1920}
             height={1080}
             className="object-cover"
