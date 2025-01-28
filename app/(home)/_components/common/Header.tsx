@@ -17,7 +17,7 @@ const Header = () => {
             <div className=' flex justify-between items-center py-2 px-5 mx-auto max-w-7xl w-full' >
                 {/* {logo} */}
                 {/* {todo: flex-1} */}
-                <div className='flex items-center gap-9' >
+                <div className='flex items-center justify-center gap-3 ' >
                     <Link
                         href='/dashboard/documents'
                         className='font-bold text-primary text-[20px]'
@@ -25,7 +25,7 @@ const Header = () => {
                         Resumate.ai
                     </Link>
                     {user && !isLoading && (
-                        <div className='flex gap-2 items-center'>
+                        <div className='flex mt-1 lg:gap-2 gap-1 justify-center items-center'>
                             <span className=' font-normal text-black/50 dark:text-white ' >Hi,</span>
                             <h5 className='font-bold text-black dark:text-white' >{user.given_name}</h5>
                         </div>
