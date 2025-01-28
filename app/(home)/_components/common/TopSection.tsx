@@ -16,7 +16,7 @@ const TopSection = () => {
                     This resume is in the trash bin
                 </div>
             )}
-            <div className='flex justify-between items-center w-full border-b pb-3 px-4' >
+            <div className='flex lg:justify-between lg:items-center w-full border-b pb-3 px-4 sm:flex-col' >
                 <div>
                     <ResumeTitle
                         initialTitle={resumeInfo?.title || ''}
