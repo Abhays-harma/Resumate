@@ -112,7 +112,7 @@ const Page = () => {
 
           {/* Description */}
           <p className="text-gray-200 text-lg md:text-xl max-w-4xl leading-relaxed">
-            No job interview callbacks? Maybe your resume isn't up to par. Let Rezi help. Our AI resume maker follows best practices and understands what kind of skills and experience employers need, so it can help you write an amazing resume in minutes.
+            No job interview callbacks? Maybe your resume isn't up to par. Let Resumate help. Our AI resume maker follows best practices and understands what kind of skills and experience employers need, so it can help you write an amazing resume in minutes.
           </p>
         </div>
       </div>
@@ -120,7 +120,7 @@ const Page = () => {
         {/* Header Section */}
         <div className="mb-12">
           <p className="text-blue-500 mb-4">Its never been easier to make your resume</p>
-          <h2 className="text-4xl font-bold mb-6">
+          <h2 className="text-4xl text-blue-500 font-bold mb-6">
             <span className="text-blue-500">Content-focused</span> features
             <br />
             developed to get you hired
@@ -136,7 +136,7 @@ const Page = () => {
           <div className="bg-gradient-to-br from-indigo-900 to-indigo-700 p-8 rounded-xl">
             <div className="bg-white rounded-lg p-6 shadow-lg">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">AI Keyword Targeting <span className="text-gray-400 text-sm">v2</span></h3>
+                <h3 className="text-lg text-blue-600 font-semibold">AI Keyword Targeting <span className="text-gray-400 text-sm">v2</span></h3>
               </div>
               <p className="text-gray-600 mb-6">Great work! You're ranking well for these keywords in the job description:</p>
 
@@ -149,7 +149,7 @@ const Page = () => {
                   'Customer Segmentation Program'
                 ].map(keyword => (
                   <div key={keyword} className="flex items-center justify-between">
-                    <span>{keyword}</span>
+                    <span className='text-gray-600' >{keyword}</span>
                     <Check className="w-5 h-5 text-green-500" />
                   </div>
                 ))}
@@ -160,7 +160,7 @@ const Page = () => {
                 <div className="space-y-3">
                   {['Product Analyst', 'Content Design'].map(keyword => (
                     <div key={keyword} className="flex items-center justify-between">
-                      <span>{keyword}</span>
+                      <span className='text-gray-600' >{keyword}</span>
                       <X className="w-5 h-5 text-gray-400" />
                     </div>
                   ))}
@@ -173,25 +173,24 @@ const Page = () => {
           <div className="space-y-12">
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-1 h-16 bg-blue-500"></div>
-                <h3 className="text-2xl font-semibold">ATS Keyword Targeting</h3>
+                <h3 className="text-2xl text-blue-500 font-semibold">ATS Keyword Targeting</h3>
               </div>
               <p className="text-gray-600">
-                Instantly improve your chances of being selected for an interview by using the targeted keywords identified by Rezi.
+                Instantly improve your chances of being selected for an interview by using the targeted keywords identified by Resumate.
               </p>
             </div>
 
             <div>
-              <h3 className="text-2xl font-semibold mb-4">Real Time Content Analysis</h3>
+              <h3 className="text-2xl text-blue-500 font-semibold mb-4">Real Time Content Analysis</h3>
               <p className="text-gray-600">
-                Rezi instantly identifies common content errors such as missing bullet points, buzz words, useful content, and more.
+                Resumate instantly identifies common content errors such as missing bullet points, buzz words, useful content, and more.
               </p>
             </div>
 
             <div>
-              <h3 className="text-2xl font-semibold mb-4">The Rezi Score</h3>
+              <h3 className="text-2xl text-blue-500 font-semibold mb-4">The Resumate Score</h3>
               <p className="text-gray-600">
-                The Rezi Score critiques how well you've created your resume across 23 criteria points - translating the result into a score rated from 1 - 100.
+                The Resumate Score critiques how well you've created your resume across 23 criteria points - translating the result into a score rated from 1 - 100.
               </p>
             </div>
           </div>
@@ -202,15 +201,15 @@ const Page = () => {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Header Section - Takes full width on mobile, 40% on desktop */}
           <div className="lg:w-5/12 lg:sticky lg:top-8 lg:self-start">
-            <p className="text-blue-600 mb-2">Even more reasons to love Rezi</p>
-            <h1 className="text-4xl font-bold mb-4">
-              Rezi Does More Than Any Other Resume Builder.
+            <p className="text-blue-600 mb-2">Even more reasons to love Resumate</p>
+            <h1 className="text-4xl text-blue-500  font-bold mb-4">
+              Resumate Does More Than Any Other Resume Builder.
             </h1>
             <p className="text-gray-600 mb-6">
-              Rezi makes it easy to get the help you need, stay organized, and take on any challenge. Its clear, simple design just makes sense — especially if you have many applications. So things like managing multiple resumes and keeping track of your files are a breeze.
+              Resumate makes it easy to get the help you need, stay organized, and take on any challenge. Its clear, simple design just makes sense — especially if you have many applications. So things like managing multiple resumes and keeping track of your files are a breeze.
             </p>
             <button className="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-              Explore Rezi User Guides
+              Explore Resumate User Guides
             </button>
           </div>
 
@@ -224,7 +223,7 @@ const Page = () => {
                   alt="Custom URL sharing interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl font-semibold">Custom URL for Sharing</h2>
+                <h2 className="text-xl text-gray-900 font-semibold">Custom URL for Sharing</h2>
               </div>
 
               {/* AI Keyword Tailoring Card */}
@@ -234,7 +233,7 @@ const Page = () => {
                   alt="AI Keyword Tailoring interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl font-semibold">AI Keyword Tailoring</h2>
+                <h2 className="text-xl text-gray-900 font-semibold">AI Keyword Tailoring</h2>
               </div>
 
               {/* AI Keyword Targeting Card */}
@@ -244,7 +243,7 @@ const Page = () => {
                   alt="AI Keyword Targeting interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl font-semibold">AI Keyword Targeting</h2>
+                <h2 className="text-xl text-gray-900 font-semibold">AI Keyword Targeting</h2>
               </div>
 
               {/* AI Summary Writer Card */}
@@ -254,7 +253,7 @@ const Page = () => {
                   alt="AI Summary Writer interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl font-semibold">AI Summary Writer</h2>
+                <h2 className="text-xl text-gray-900 font-semibold">AI Summary Writer</h2>
               </div>
             </div>
           </div>
