@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Video } from 'lucide-react';
 import Image from 'next/image';
 import { Check, X } from 'lucide-react';
+import Footer from './components/Footer';
 
 const Page = () => {
   return (
@@ -196,7 +197,70 @@ const Page = () => {
           </div>
         </div>
       </div>
+      <div className="max-w-7xl mx-auto p-4 md:p-8 font-sans">
+        {/* Main container with flex layout for side-by-side on desktop */}
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Header Section - Takes full width on mobile, 40% on desktop */}
+          <div className="lg:w-5/12 lg:sticky lg:top-8 lg:self-start">
+            <p className="text-blue-600 mb-2">Even more reasons to love Rezi</p>
+            <h1 className="text-4xl font-bold mb-4">
+              Rezi Does More Than Any Other Resume Builder.
+            </h1>
+            <p className="text-gray-600 mb-6">
+              Rezi makes it easy to get the help you need, stay organized, and take on any challenge. Its clear, simple design just makes sense — especially if you have many applications. So things like managing multiple resumes and keeping track of your files are a breeze.
+            </p>
+            <button className="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+              Explore Rezi User Guides
+            </button>
+          </div>
 
+          {/* Features Grid - Takes full width on mobile, 60% on desktop */}
+          <div className="lg:w-7/12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Share Resume Card */}
+              <div className="transform hover:scale-[1.02] transition-transform">
+                <img
+                  src="/custom-url.png"
+                  alt="Custom URL sharing interface"
+                  className="w-full rounded-lg shadow-sm mb-3"
+                />
+                <h2 className="text-xl font-semibold">Custom URL for Sharing</h2>
+              </div>
+
+              {/* AI Keyword Tailoring Card */}
+              <div className="transform hover:scale-[1.02] transition-transform">
+                <img
+                  src="/keyword-tailoring.png"
+                  alt="AI Keyword Tailoring interface"
+                  className="w-full rounded-lg shadow-sm mb-3"
+                />
+                <h2 className="text-xl font-semibold">AI Keyword Tailoring</h2>
+              </div>
+
+              {/* AI Keyword Targeting Card */}
+              <div className="transform hover:scale-[1.02] transition-transform">
+                <img
+                  src="/keyword-targeting.png"
+                  alt="AI Keyword Targeting interface"
+                  className="w-full rounded-lg shadow-sm mb-3"
+                />
+                <h2 className="text-xl font-semibold">AI Keyword Targeting</h2>
+              </div>
+
+              {/* AI Summary Writer Card */}
+              <div className="transform hover:scale-[1.02] transition-transform">
+                <img
+                  src="/summary-writer.png"
+                  alt="AI Summary Writer interface"
+                  className="w-full rounded-lg shadow-sm mb-3"
+                />
+                <h2 className="text-xl font-semibold">AI Summary Writer</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer/>
     </div>
   );
 };
