@@ -5,6 +5,7 @@ import ResumeTitle from '../ResumeTitle';
 import ThemeColor from './ThemeColor';
 import PreviewModal from '../PreviewModal';
 import DownloadResume from '../DownloadResume';
+import MoreOption from '../MoreOption';
 
 const TopSection = () => {
     const { resumeInfo, isLoading } = useResumeInfoContext();
@@ -60,6 +61,7 @@ const TopSection = () => {
                         status={resumeInfo?.status}
                         isLoading={isLoading}
                     />
+                    <MoreOption/>
                 </div>
             </div>
         </>
