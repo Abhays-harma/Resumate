@@ -10,7 +10,11 @@ export const generateThumbnail = async () => {
   try {
     const pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
     const canvas = await html2canvas(resumeElement, {
+<<<<<<< HEAD
       scale: 0.5 * pixelRatio, // Higher scale for sharper image
+=======
+      scale: 0.25 * pixelRatio, // Higher scale for sharper image
+>>>>>>> 3c2efa69e5dbaeaebe5625d37c8d22900e7093a0
       width: resumeElement.scrollWidth,
       height: resumeElement.scrollHeight,
       useCORS: true,

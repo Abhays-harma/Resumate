@@ -42,6 +42,7 @@ const Header = () => {
                         </div>
                         {/* {middle} */}
                         {!isMobile && window.innerWidth > 650 ? (
+<<<<<<< HEAD
                             <div className='flex gap-10 justify-center items-center' >
                                 <Link
                                     className='mt-1'
@@ -63,6 +64,29 @@ const Header = () => {
                                 </Link>
                             </div>
                         ) : null}
+=======
+                                    <div className='flex gap-10 justify-center items-center' >
+                                        <Link
+                                            className='mt-1'
+                                            href='/'
+                                        >
+                                            Ai Features
+                                        </Link>
+                                        <Link
+                                            className='mt-1'
+                                            href='/'
+                                        >
+                                            Resorces
+                                        </Link>
+                                        <Link
+                                            className='mt-1'
+                                            href='/'
+                                        >
+                                            About
+                                        </Link>
+                                    </div>
+                                ) : null}
+>>>>>>> 3c2efa69e5dbaeaebe5625d37c8d22900e7093a0
 
                         {/* {right section} */}
                         <div className='flex items-center gap-4'>
@@ -70,6 +94,7 @@ const Header = () => {
                             <Button
                                 variant='outline'
                             >
+<<<<<<< HEAD
                                 <LoginLink
                                     authUrlParams={{
                                         connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE_PASSWORDLESS || ""
@@ -77,6 +102,9 @@ const Header = () => {
                                 >
                                     Sign in
                                 </LoginLink>
+=======
+                                <LoginLink>Sign in</LoginLink>
+>>>>>>> 3c2efa69e5dbaeaebe5625d37c8d22900e7093a0
                             </Button>
 
                             <Button
