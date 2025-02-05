@@ -21,7 +21,7 @@ const Footer = () => {
             { name: 'White Label', badge: 'New' }
         ],
         'Content': [
-            'Rezi Blog',
+            'Resumate Blog',
             'Case Studies',
             'User Reviews',
             'User Guides'
@@ -30,7 +30,7 @@ const Footer = () => {
             'About us',
             'Authors',
             'Editorial Process',
-            'Contact Rezi'
+            'Contact Resumate'
         ]
     };
 
@@ -38,7 +38,7 @@ const Footer = () => {
         <footer className="w-full mx-auto px-4 py-8 font-sans">
             {/* Top Section */}
             <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">Rezi</h2>
+                <h2 className="text-2xl font-bold mb-2">Resumate</h2>
                 <p className="text-gray-600 mb-4">
                     Join over 2,934,574 job seekers<br />
                     helped since September 2019
@@ -78,9 +78,8 @@ const Footer = () => {
             {/* Bottom Section */}
             <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200">
                 <div className="flex items-center space-x-6 mb-4 md:mb-0">
-                    <span className="text-gray-500">© 2024 Rezi</span>
+                    <span className="text-gray-500">© 2024 Resumate</span>
                     <a href="#" className="text-gray-500 hover:text-gray-700">Terms & Privacy</a>
-                    <a href="#" className="text-gray-500 hover:text-gray-700">Product Changelog</a>
                     <a href="#" className="text-gray-500 hover:text-gray-700">Resumatic</a>
                     <a href="#" className="text-gray-500 hover:text-gray-700">Resumai</a>
                 </div>

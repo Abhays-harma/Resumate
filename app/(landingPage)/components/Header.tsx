@@ -42,27 +42,27 @@ const Header = () => {
                         </div>
                         {/* {middle} */}
                         {!isMobile && window.innerWidth > 650 ? (
-                                    <div className='flex gap-10 justify-center items-center' >
-                                        <Link
-                                            className='mt-1'
-                                            href='/'
-                                        >
-                                            Ai Features
-                                        </Link>
-                                        <Link
-                                            className='mt-1'
-                                            href='/'
-                                        >
-                                            Resorces
-                                        </Link>
-                                        <Link
-                                            className='mt-1'
-                                            href='/'
-                                        >
-                                            About
-                                        </Link>
-                                    </div>
-                                ) : null}
+                            <div className='flex gap-10 justify-center items-center' >
+                                <Link
+                                    className='mt-1'
+                                    href='/'
+                                >
+                                    Ai Features
+                                </Link>
+                                <Link
+                                    className='mt-1'
+                                    href='/'
+                                >
+                                    Resorces
+                                </Link>
+                                <Link
+                                    className='mt-1'
+                                    href='/'
+                                >
+                                    About
+                                </Link>
+                            </div>
+                        ) : null}
 
                         {/* {right section} */}
                         <div className='flex items-center gap-4'>
@@ -70,7 +70,13 @@ const Header = () => {
                             <Button
                                 variant='outline'
                             >
-                                <LoginLink>Sign in</LoginLink>
+                                <LoginLink
+                                    authUrlParams={{
+                                        connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE_PASSWORDLESS || ""
+                                    }}
+                                >
+                                    Sign in
+                                </LoginLink>
                             </Button>
 
                             <Button
