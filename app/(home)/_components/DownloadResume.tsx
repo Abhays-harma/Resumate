@@ -81,7 +81,7 @@ const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
       onClick={handleDownload}
     >
       <div className="flex items-center justify-center gap-1 w-full">
-        <DownloadCloud size="17px" />
+        <DownloadCloud className="text-purple-500" size="17px" />
         <span className="hidden lg:flex">
           {loading ? "Generating PDF..." : "Download Resume"}
         </span>

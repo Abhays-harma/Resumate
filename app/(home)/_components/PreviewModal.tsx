@@ -28,7 +28,7 @@ const PreviewModal = () => {
                     lg:w-auto lg:p-4"
           >
             <div className="flex items-center gap-1">
-              <Eye size="17px" />
+              <Eye className="text-green-500" size="17px" />
               <span className="hidden  lg:flex">Preview</span>
             </div>
           </Button>

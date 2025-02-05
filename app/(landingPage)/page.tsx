@@ -10,7 +10,6 @@ import Footer from './components/Footer';
 const Page = () => {
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50">
-      <Header />
       <div className="w-full max-w-5xl px-6 pt-16 mt-10 text-center">
         <div className="flex flex-col gap-6 justify-center">
           <h1 className="text-5xl font-extrabold text-gray-800">
@@ -259,7 +258,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      
     </div>
   );
 };

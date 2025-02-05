@@ -45,19 +45,19 @@ const Header = () => {
                             <div className='flex gap-10 justify-center items-center' >
                                 <Link
                                     className='mt-1'
-                                    href='/'
+                                    href='/aiFeatures'
                                 >
                                     Ai Features
                                 </Link>
                                 <Link
                                     className='mt-1'
-                                    href='/'
+                                    href='/resources'
                                 >
                                     Resorces
                                 </Link>
                                 <Link
                                     className='mt-1'
-                                    href='/'
+                                    href='/about'
                                 >
                                     About
                                 </Link>
@@ -81,7 +81,7 @@ const Header = () => {
 
                             <Button
                             >
-                                <RegisterLink>Get Started</RegisterLink>
+                                <RegisterLink className='text-white' >Get Started</RegisterLink>
                             </Button>
 
                         </div>
@@ -92,19 +92,19 @@ const Header = () => {
                         <>
                             <Link
                                 className='mt-1'
-                                href='/'
+                                href='/aiFeatures'
                             >
                                 Ai Features
                             </Link>
                             <Link
                                 className='mt-1'
-                                href='/'
+                                href='/resources'
                             >
                                 Resorces
                             </Link>
                             <Link
                                 className='mt-1'
-                                href='/'
+                                href='/about'
                             >
                                 About
                             </Link>

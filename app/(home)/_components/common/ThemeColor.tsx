@@ -94,9 +94,9 @@ const ThemeColor = () => {
                     className='bg-white border gap-1 dark:bg-gray-800 !w-10 lg:!w-24 !p-2 lg:!p-4 flex items-center justify-center'
                 >
                     <div className='flex items-center justify-center gap-1 w-full'>
-                        <Palette />
+                        <Palette className='text-blue-500' />
                         <span className='hidden lg:flex'>Theme</span>
-                        <ChevronDown size='14px' />
+                        <ChevronDown className='text-blue-500' size='14px' />
                     </div>
                 </Button>
 
