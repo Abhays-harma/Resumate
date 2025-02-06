@@ -7,23 +7,28 @@ import EducationPreview from './EducationPreview'
 import SkillsPreview from './SkillsPreview'
 
 const ResumePreview = () => {
-  const { resumeInfo } = useResumeInfoContext()
+  const { resumeInfo,isLoading } = useResumeInfoContext()
   return (
     <div id='resume-preview-id'  className='bg-white  w-full h-full px-5 py-1 dark:bg-card dark:border dark:border-b-gray-800 dark:border-x-gray-800 shadow-lg ' >
       <PersonalInfoPreview
         resumeInfo={resumeInfo}
+        isLoading={isLoading}
       />
       <SummaryPreview
         resumeInfo={resumeInfo}
+        isLoading={isLoading}
       />
       <ExperiencePreview
         resumeInfo={resumeInfo}
+        isLoading={isLoading}
       />
       <EducationPreview
         resumeInfo={resumeInfo}
+        isLoading={isLoading}
       />
       <SkillsPreview
         resumeInfo={resumeInfo}
+        isLoading={isLoading}
       />
     </div>
   )

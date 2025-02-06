@@ -1,11 +1,17 @@
+import SkeletonLoader from '@/components/SkeletonLoader';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ResumeDataType } from '@/types/resume.type';
 import React, { FC } from 'react';
 
 interface Props {
     resumeInfo: ResumeDataType | undefined;
+    isLoading:boolean
 }
 
-const SkillsPreview: FC<Props> = ({ resumeInfo }) => {
+const SkillsPreview: FC<Props> = ({ resumeInfo,isLoading }) => {
+    if (isLoading) {
+        return <SkeletonLoader />;
+      }
     return (
         <div className="w-full my-0">
             {/* Title */}
@@ -17,7 +23,7 @@ const SkillsPreview: FC<Props> = ({ resumeInfo }) => {
             </h5>
             <hr
                 style={{ borderColor: resumeInfo?.themeColor ?? 'inherit' }}
-                className="border-[0.5px] my-1"
+                className="border-[0.5px] my-2"
             />
 
             {/* Skills Grid */}
