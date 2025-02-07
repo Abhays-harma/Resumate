@@ -4,7 +4,7 @@ import { zValidator } from '@hono/zod-validator'
 import { getAuthUser } from "@/lib/kinde";
 import { v4 as uuidv4 } from 'uuid';
 import { db } from "@/db";
-import { documentTable, educationTable, experienceTable, personalInfoTable, skillsTable } from "@/db/schema";
+import { documentTable, educationTable, experienceTable, personalInfoTable, projectTable, skillsTable } from "@/db/schema";
 import { and, eq, ne } from "drizzle-orm";
 import { updateSchema } from "@/db/schema/document";
 
@@ -72,6 +72,7 @@ const documentRoute = new Hono()
                     experience,
                     education,
                     skills,
+                    projects
                 } = c.req.valid('json')
                 if (!documentId) {
                     return c.json({
@@ -164,6 +165,41 @@ const documentRoute = new Hono()
                                 )
                         } else {
                             await db.insert(experienceTable).values({
+                                docId: existingDocument.id,
+                                ...data,
+                            })
+                        }
+                    }
+                }
+
+                //updating or inerting projects
+                if (projects && Array.isArray(projects)) {
+                    const existingProjects = await db
+                        .select()
+                        .from(projectTable)
+                        .where(
+                            eq(projectTable.docId,
+                                existingDocument.id
+                            ),
+                        )
+                    const existingProjectsMap = new Set(
+                        existingProjects.map((project) => project.id)
+                    )
+
+                    for (const project of projects) {
+                        const { id, ...data } = project;
+                        if (id !== undefined && existingProjectsMap.has(id)) {
+                            await db
+                                .update(projectTable)
+                                .set(data)
+                                .where(
+                                    and(
+                                        eq(projectTable.docId, existingDocument.id),
+                                        eq(projectTable.id, id),
+                                    )
+                                )
+                        } else {
+                            await db.insert(projectTable).values({
                                 docId: existingDocument.id,
                                 ...data,
                             })
@@ -302,10 +338,11 @@ const documentRoute = new Hono()
                         eq(documentTable.documentId, documentId),
                     ),
                     with: {
-                        personalInfo: true,
+                        personalInfo:true,
                         experiences: true,
                         educations: true,
                         skills: true,
+                        projects:true,
                     }
                 })
                 return c.json({
@@ -409,6 +446,36 @@ const documentRoute = new Hono()
                                     .where(eq(skillsTable.docId,id))
                 return c.json({
                     skills,
+                    success:true,
+                },200)
+            } catch (error) {
+                return c.json({
+                    success:false,
+                    message:error,
+                },500)
+            }
+        }
+    )
+    .get('/projects/:documentId',
+        zValidator('param', z.object({
+            documentId: z.string(),
+        })),
+        getAuthUser,
+        async (c) => {
+            try {
+                const {documentId}=c.req.valid('param')
+    
+                const [document]=await db.select()
+                                    .from(documentTable)
+                                    .where(eq(documentTable.documentId,documentId))
+                                    .limit(1)
+                const id=document?.id;
+    
+                const projects=await db.select()
+                                    .from(projectTable)
+                                    .where(eq(projectTable.docId,id))
+                return c.json({
+                    projects,
                     success:true,
                 },200)
             } catch (error) {

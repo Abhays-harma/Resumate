@@ -7,6 +7,7 @@ import SummaryForm from './forms/SummaryForm'
 import ExperienceForm from './forms/ExperienceForm'
 import EducationForm from './forms/EducationForm'
 import SkillsForm from './forms/SkillsForm'
+import ProjectsForm from './forms/ProjectsForm'
 
 const ResumeForm = () => {
   const [activeIndex, setactiveIndex] = useState(1)
@@ -30,14 +31,14 @@ const ResumeForm = () => {
               Previous
             </Button>
           )}
-          {(activeIndex>=1 && activeIndex<5) && (
+          {(activeIndex>=1 && activeIndex<6) && (
             <Button
             variant='outline'
             className='!px-1 !py-2 !h-auto'
             size='default'
             onClick={()=>setactiveIndex(activeIndex+1)}
             disabled={
-              activeIndex===5 || resumeInfo?.status==='archived'
+              activeIndex===6 || resumeInfo?.status==='archived'
             }
           >
             Next
@@ -56,9 +57,12 @@ const ResumeForm = () => {
             <ExperienceForm handleNext={handleNext} />
           )}
           {activeIndex===4 &&(
-            <EducationForm handleNext={handleNext} />
+            < ProjectsForm handleNext={handleNext} />
           )}
           {activeIndex===5 &&(
+            <EducationForm handleNext={handleNext} />
+          )}
+          {activeIndex===6 &&(
             <SkillsForm handleNext={handleNext} />
           )}
         </div>

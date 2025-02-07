@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 
 interface Props {
     resumeInfo: ResumeDataType | undefined,
-    isLoading:boolean
+    isLoading: boolean
 }
 
 const PersonalInfoPreview: FC<Props> = ({
@@ -44,9 +44,11 @@ const PersonalInfoPreview: FC<Props> = ({
             </p>
             <div className='flex justify-between items-center pt-3' >
                 <div className='font-normal flex gap-1 justify-center items-center text-[13px]' >
+                    <Phone width='15' height='15' />
                     {resumeInfo?.personalInfo?.phone || 'Phone Number'}
                 </div>
                 <div className='font-normal flex justify-center gap-1 items-center text-[13px]' >
+                    <Mail width='15' height='15' />
                     {resumeInfo?.personalInfo?.email || 'Email'}
                 </div>
             </div>

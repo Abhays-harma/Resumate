@@ -5,6 +5,7 @@ import { experienceTable } from "./experience";
 import { educationTable } from "./education";
 import { skillsTable } from "./skills";
 import { z } from "zod";
+import { projectTable } from "./project";
 
 export const statusEnum = pgEnum("status", ["archived", "private", "public"]);
 
@@ -31,6 +32,7 @@ export const documentRelations = relations(
         experiences: many(experienceTable),
         educations: many(educationTable),
         skills: many(skillsTable),
+        projects: many(projectTable)
     })
 )
 
@@ -50,7 +52,7 @@ export const updateSchema = z.object({
         email: z.string().email('Invalid email address').optional(),
     }).optional(),
     experience: z.array(z.object({
-        id:z.number().optional(),
+        id: z.number().optional(),
         title: z.string().min(1, 'Title cannot be empty').optional(),
         companyName: z.string().optional(),
         city: z.string().optional(),
@@ -61,7 +63,7 @@ export const updateSchema = z.object({
         endDate: z.string().optional(),
     })).optional(),
     education: z.array(z.object({
-        id:z.number().optional(),
+        id: z.number().optional(),
         universityName: z.string().min(1, "University name cannot be empty").optional(),
         degree: z.string().optional(),
         major: z.string().optional(),
@@ -70,10 +72,22 @@ export const updateSchema = z.object({
         endDate: z.string().optional(),
     })).optional(),
     skills: z.array(z.object({
-        id:z.number().optional(),
+        id: z.number().optional(),
         name: z.string().min(1, "Skill name cannot be empty").optional(),
         rating: z.number().min(0).max(5).optional(),
     })).optional(),
-})
+    projects: z.array(z.object({
+        id: z.number().optional(),
+        title: z.string().min(1, "Project title cannot be empty").optional(),
+        organization: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+        currentlyWorking: z.boolean().optional(),
+        technologies: z.array(z.string()).optional(),
+        description: z.string().optional(),
+        projectLink: z.string().url('Invalid URL').optional(),
+    })).optional(),
+});
+
 
 export type UpdateDocumentSchema=z.infer<typeof updateSchema>;

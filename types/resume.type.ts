@@ -29,6 +29,19 @@ export type SkillType = {
   rating?: number;
 };
 
+export type ProjectType = {
+  id?: number;
+  docId?: number | undefined;
+  title: string | undefined;
+  organization?: string | undefined;
+  startDate?: string | undefined;
+  endDate?: string | undefined;
+  currentlyWorking: boolean;
+  description?: string | undefined;
+  projectLink?: string | undefined;
+  technologies?: string[] | undefined;
+};
+
 export type PersonalInfoType = {
   id?: number;
   docId?: number | undefined;
@@ -55,5 +68,5 @@ export type ResumeDataType = {
   experiences?: ExperienceType[] | undefined;
   educations?: EducationType[] | undefined;
   skills?: SkillType[] | undefined;
-  updatedAt?: string;
+  projects?: ProjectType[] | undefined;
 };

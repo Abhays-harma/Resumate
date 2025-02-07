@@ -3,15 +3,36 @@ import { useResumeInfoContext } from "@/context/resume-info-provider";
 import { toast } from "@/hooks/use-toast";
 import { formatFileName } from "@/lib/helper";
 import { StatusType } from "@/types/resume.type";
-import html2canvas from "html2canvas";
 import { DownloadCloud } from "lucide-react";
-import { jsPDF } from "jspdf";
 import React, { FC, useCallback, useState } from "react";
+
+// Import html2pdf with type assertion
+const html2pdf = require('html2pdf.js') as any;
 
 interface Props {
   title: string;
   status?: StatusType;
   isLoading: boolean;
+}
+
+// Define options interface inline
+interface PdfOptions {
+  margin?: number[];
+  filename?: string;
+  image?: {
+    type?: string;
+    quality?: number;
+  };
+  html2canvas?: {
+    scale?: number;
+    useCORS?: boolean;
+    letterRendering?: boolean;
+  };
+  jsPDF?: {
+    unit?: string;
+    format?: string | number[];
+    orientation?: string;
+  };
 }
 
 const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
@@ -30,42 +51,40 @@ const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
     }
 
     setLoading(true);
-
-    const fileName = formatFileName(title);
+    
     try {
-      // Generate canvas with higher resolution
-      const canvas = await html2canvas(resumeElement, {
-        scale: 2, // Increase scale for better quality
-        useCORS: true, // Handle cross-origin images
-        backgroundColor: "#fff", // Ensure white background for PDFs
+      const fileName = formatFileName(title);
+      
+      const opt: PdfOptions = {
+        margin: [0, 0, 0, 0],
+        filename: `${fileName}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: {
+          unit: 'in',
+          format: 'a4',
+          orientation: 'portrait'
+        }
+      };
+
+      await html2pdf()
+        .set(opt)
+        .from(resumeElement)
+        .save();
+
+      toast({
+        title: "Success",
+        description: "Resume downloaded successfully",
       });
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      const pdfWidth = pdf.internal.pageSize.getWidth(); // A4 page width in mm
-      const pdfHeight = pdf.internal.pageSize.getHeight(); // A4 page height in mm
-      const imgWidth = pdfWidth; // Image width matches PDF width
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pdfHeight;
-      }
-
-      pdf.save(fileName);
     } catch (error) {
-      console.error("Error generating PDF:", error);
+      console.error('PDF generation error:', error);
       toast({
         title: "Error",
-        description: "Error generating PDF. Please try again.",
+        description: "Failed to download resume",
         variant: "destructive",
       });
     } finally {
