@@ -1,38 +1,17 @@
+import React, { FC, useCallback, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useResumeInfoContext } from "@/context/resume-info-provider";
 import { toast } from "@/hooks/use-toast";
 import { formatFileName } from "@/lib/helper";
 import { StatusType } from "@/types/resume.type";
 import { DownloadCloud } from "lucide-react";
-import React, { FC, useCallback, useState } from "react";
 
-// Import html2pdf with type assertion
 const html2pdf = require('html2pdf.js') as any;
 
 interface Props {
   title: string;
   status?: StatusType;
   isLoading: boolean;
-}
-
-// Define options interface inline
-interface PdfOptions {
-  margin?: number[];
-  filename?: string;
-  image?: {
-    type?: string;
-    quality?: number;
-  };
-  html2canvas?: {
-    scale?: number;
-    useCORS?: boolean;
-    letterRendering?: boolean;
-  };
-  jsPDF?: {
-    unit?: string;
-    format?: string | number[];
-    orientation?: string;
-  };
 }
 
 const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
@@ -44,38 +23,37 @@ const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
     if (!resumeElement) {
       toast({
         title: "Error",
-        description: "Could not download",
+        description: "Could not find resume element",
         variant: "destructive",
       });
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const fileName = formatFileName(title);
       
-      const opt: PdfOptions = {
-        margin: [0, 0, 0, 0],
+      // Improved A4 settings with accurate margins
+      const opt = {
+        margin: [20, 20, 20, 20], // Increased margins for better spacing
         filename: `${fileName}.pdf`,
-        image: { type: 'jpeg', quality: 1 },
+        image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { 
-          scale: 2,
+          scale: 3, // Adjusted for better clarity
           useCORS: true,
-          letterRendering: true
+          letterRendering: true,
+          scrollY: 0
         },
         jsPDF: {
-          unit: 'in',
+          unit: 'pt',
           format: 'a4',
           orientation: 'portrait'
         }
       };
 
-      await html2pdf()
-        .set(opt)
-        .from(resumeElement)
-        .save();
-
+      await html2pdf().set(opt).from(resumeElement).save();
+      
       toast({
         title: "Success",
         description: "Resume downloaded successfully",
