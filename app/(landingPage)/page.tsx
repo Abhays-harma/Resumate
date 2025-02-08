@@ -23,12 +23,12 @@ const Page = () => {
           </h5>
           <div className="flex gap-4 justify-center items-center mt-8">
             <Button className="px-6 py-3 text-lg font-medium bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg">
-              Get Started
+              <RegisterLink className='text-white' >Get Started</RegisterLink>
             </Button>
-            <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
+            {/* <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
               <Video />
               Watch Video
-            </Button>
+            </Button> */}
           </div>
           <div className="max-w-4xl mx-auto px-4 py-8">
             {/* Star Rating */}
@@ -125,7 +125,7 @@ const Page = () => {
             developed to get you hired
           </h2>
           <button className="px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 shadow-sm">
-            Create Free Resume
+            <RegisterLink >Create free Resume</RegisterLink>
           </button>
         </div>
 
