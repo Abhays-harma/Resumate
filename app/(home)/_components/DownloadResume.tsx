@@ -20,6 +20,8 @@ const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
 
   const handleDownload = useCallback(async () => {
     const resumeElement = document.getElementById("resume-preview-id");
+    const skillElement = document.getElementById("skillId");
+  
     if (!resumeElement) {
       toast({
         title: "Error",
@@ -28,47 +30,57 @@ const DownloadResume: FC<Props> = ({ title, status, isLoading }) => {
       });
       return;
     }
-
+  
     setLoading(true);
-
+  
+    // Temporarily change skill section layout
+    const originalSkillClass = skillElement?.className;
+    if (skillElement) {
+      skillElement.className = "grid grid-cols-3 gap-3 pt-1 my-0 mx-0";
+    }
+  
     try {
       const fileName = formatFileName(title);
       
-      // Improved A4 settings with accurate margins
       const opt = {
-        margin: [20, 20, 20, 20], // Increased margins for better spacing
+        margin: [20, 20, 20, 20],
         filename: `${fileName}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: "jpeg", quality: 0.98 },
         html2canvas: { 
-          scale: 3, // Adjusted for better clarity
+          scale: 3,
           useCORS: true,
           letterRendering: true,
           scrollY: 0
         },
         jsPDF: {
-          unit: 'pt',
-          format: 'a4',
-          orientation: 'portrait'
+          unit: "pt",
+          format: "a4",
+          orientation: "portrait"
         }
       };
-
+  
       await html2pdf().set(opt).from(resumeElement).save();
-      
+  
       toast({
         title: "Success",
         description: "Resume downloaded successfully",
       });
     } catch (error) {
-      console.error('PDF generation error:', error);
+      console.error("PDF generation error:", error);
       toast({
         title: "Error",
         description: "Failed to download resume",
         variant: "destructive",
       });
     } finally {
+      // Revert skill section layout to original
+      if (skillElement) {
+        skillElement.className = originalSkillClass || "";
+      }
       setLoading(false);
     }
   }, [title]);
+  
 
   return (
     <Button

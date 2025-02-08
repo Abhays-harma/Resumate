@@ -1,10 +1,14 @@
 'use client'
 import useGetDocuments from '@/features/use-get-documents'
-import React from 'react'
+import React, { FC } from 'react'
 import { LoaderCircle, RotateCw } from 'lucide-react';
 import ResumeItem from './ResumeItem';
 
-const ResumeList = () => {
+interface Prop{
+  setLoading:(loading: boolean) => void;
+}
+
+const ResumeList:FC<Prop> = ({ setLoading }) => {
   const { data, isLoading, refetch, isError } = useGetDocuments();
   const resumes = data?.data;
   return (
@@ -30,6 +34,7 @@ const ResumeList = () => {
               updatedAt={resume.updatedAt}
               themeColor={resume.themeColor}
               thumbnail={resume?.thumbnail}
+              setLoading={setLoading}
             />
           ))}
         </>
@@ -38,4 +43,4 @@ const ResumeList = () => {
   )
 }
 
-export default ResumeList
+export default ResumeList;

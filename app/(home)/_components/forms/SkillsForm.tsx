@@ -1,378 +1,199 @@
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useResumeInfoContext } from '@/context/resume-info-provider'
-import useDeleteSkill from '@/features/use-delete-skill'
-import useGetSkills from '@/features/use-get-skills'
-import useUpdateDocument from '@/features/use-update-document'
-import { toast } from '@/hooks/use-toast'
-import { generateThumbnail } from '@/lib/helper'
-import { SkillType } from '@/types/resume.type'
-import { LoaderCircle, Pencil, Trash2 } from 'lucide-react'
-import React, { FC, useCallback, useState } from 'react'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useResumeInfoContext } from '@/context/resume-info-provider';
+import useUpdateDocument from '@/features/use-update-document';
+import { toast } from '@/hooks/use-toast';
+import { generateThumbnail } from '@/lib/helper';
+import { SkillType } from '@/types/resume.type';
+import { LoaderCircle, Star, X } from 'lucide-react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
-interface Prop {
-    handleNext: () => void,
+interface Props {
+    handleNext: () => void;
 }
 
-const initialSkill = {
-    name: '',
-    rating: 0,
-}
+const SkillsForm: FC<Props> = ({ handleNext }) => {
+    const { resumeInfo, onUpdate } = useResumeInfoContext();
+    const { mutateAsync, isPending } = useUpdateDocument();
+    const [skillName, setSkillName] = useState('');
+    const [skillRating, setSkillRating] = useState(0);
+    const [tempSkills, setTempSkills] = useState<SkillType[]>([]);
 
-const SkillsForm: FC<Prop> = ({ handleNext }) => {
-    const [skill, setSkill] = useState<SkillType>(initialSkill)
-    const { resumeInfo, onUpdate } = useResumeInfoContext()
-    const { mutateAsync, isPending } = useUpdateDocument()
-    const [isEdit, setIsEdit] = useState(false)
-    const [editingSkillId, seteditingSkillId] = useState<number | undefined>(undefined)
-    const [isOpen, setIsOpen] = useState(false)
-    const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
-    const { data, isLoading, refetch } = useGetSkills()
-    const skills = data?.skills ?? resumeInfo?.skills ?? [];
-    const { mutate, isPending: isDeletePending } = useDeleteSkill()
-
-
-    const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-    
-        setSkill((prev) => ({
-            ...prev,
-            [name]: name === "rating" ? Number(value) || 0 : value,
-        }));
-    }, []);
-    
-
-    const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log("rating type : ", typeof skill?.rating);
-
-        const updatedSkills = [...(resumeInfo?.skills ?? []), skill]
-        const updatedInfo = {
-            ...resumeInfo,
-            skills: updatedSkills,
-            title: resumeInfo?.title || 'Untitled Resume',
-            status: resumeInfo?.status ?? 'private',
-            summary: resumeInfo?.summary || '',
+    // Load existing skills from the database when the form loads
+    useEffect(() => {
+        if (resumeInfo?.skills) {
+            setTempSkills(resumeInfo.skills);
         }
+    }, [resumeInfo?.skills]);
 
-        onUpdate(updatedInfo)
+    // Handle star rating selection and automatically add the skill
+    const handleRating = useCallback(
+        (rating: number) => {
+            setSkillRating(rating);
+            if (skillName.trim() && rating > 0) {
+                const newSkill = {
+                    name: skillName,
+                    rating: rating,
+                    id: Date.now(), // Temporary ID for local use
+                };
+                setTempSkills((prev) => [...prev, newSkill]);
+                setSkillName('');
+                setSkillRating(0);
+            }
+        },
+        [skillName]
+    );
 
-        try {
-            const thumbnail = await generateThumbnail()
-            const currentNo = resumeInfo?.currentPosition || 1
-            await mutateAsync({
-                skills: updatedSkills,
-                thumbnail,
-                currentPosition: currentNo,
-            }, {
-                onSuccess: () => {
-                    toast({
-                        title: 'Success',
-                        description: 'Updated Successfully',
-                    })
-                    setSkill(initialSkill)
-                    refetch()
-                    const skillSection = document.getElementById('skills-sections')
-                    if (skillSection) {
-                        skillSection.scrollIntoView({ behavior: 'smooth' })
-                    }
-                },
-                onError: () => {
-                    toast({
-                        title: 'Error',
-                        description: 'Error in updating skill',
-                        variant: 'destructive',
-                    })
-                }
-            })
-        } catch {
+    // Remove skill from the temporary list
+    const handleRemoveSkill = useCallback((id: number) => {
+        setTempSkills((prev) => prev.filter((skill) => skill.id !== id));
+    }, []);
+
+    // Save all skills to the database
+    const handleSaveChanges = useCallback(async () => {
+        if (tempSkills.length === 0) {
             toast({
                 title: 'Error',
-                description: 'Error in updating skill',
+                description: 'No skills to save.',
                 variant: 'destructive',
-            })
+            });
+            return;
         }
-    }, [skill, resumeInfo, onUpdate, mutateAsync, refetch])
-
-    const handleEditSubmit = useCallback(async (e: { preventDefault: () => void }) => {
-        e.preventDefault()
-        const newSkill = { ...skill }
-        const updatedSkills = resumeInfo?.skills?.filter((skill) => skill?.id != editingSkillId)
-        const newUpdatedSkills = [...(updatedSkills ?? []), newSkill]
-
-        onUpdate({
-            ...resumeInfo,
-            skills: newUpdatedSkills,
-            title: resumeInfo?.title || 'Untitled Resume',
-            status: resumeInfo?.status ?? 'private',
-            summary: resumeInfo?.summary || '',
-        })
 
         const thumbnail = await generateThumbnail();
-        const currentNo = resumeInfo?.currentPosition ? resumeInfo?.currentPosition : 1;
-        await mutateAsync(
-            {
-                skills: newUpdatedSkills,
-                thumbnail: thumbnail,
-                currentPosition: currentNo,
-            },
-            {
-                onSuccess: () => {
-                    toast({
-                        title: 'Success',
-                        description: 'Updated Successfully',
-                    })
-                    refetch()
-                    setSkill(initialSkill)
-                    setIsEdit(false)
+        const currentNo = resumeInfo?.currentPosition || 1;
 
-
-                    const skillSection = document.getElementById('skills-sections')
-                    if (skillSection) {
-                        skillSection.scrollIntoView({ behavior: 'smooth' })
-                    }
+        try {
+            await mutateAsync(
+                {
+                    skills: tempSkills,
+                    thumbnail,
+                    currentPosition: currentNo,
                 },
+                {
+                    onSuccess: () => {
+                        onUpdate({
+                            ...resumeInfo,
+                            skills: tempSkills,
+                            title: resumeInfo?.title || 'Untitled Resume',
+                            status: resumeInfo?.status ?? 'private',
+                            summary: resumeInfo?.summary || '',
+                        });
 
-                onError: () => {
-                    toast({
-                        title: 'Error',
-                        description: 'Error in updating education',
-                        variant: 'destructive',
-                    })
+                        toast({
+                            title: 'Success',
+                            description: 'Skills saved successfully.',
+                        });
+                    },
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            description: 'Failed to save skills. Please try again.',
+                            variant: 'destructive',
+                        });
+                    },
                 }
-            }
-        )
-    }, [skill, resumeInfo, onUpdate, skills, isEdit])
-
-    const handleDelete = useCallback(() => {
-        if (deletingId) {
-            const updatedSkills = resumeInfo?.skills?.filter((skill) => skill.id !== deletingId) ?? [];
-            mutate(deletingId, {
-                onSuccess: () => {
-                    toast({
-                        title: 'Success',
-                        description: 'Deleted Successfully'
-                    })
-                    onUpdate({
-                        ...resumeInfo,
-                        skills: updatedSkills,
-                        title: resumeInfo?.title || 'Untitled Resume',
-                        status: resumeInfo?.status ?? 'private',
-                        summary: resumeInfo?.summary || '',
-                    });
-                    refetch();
-                    setDeletingId(undefined)
-                    setIsOpen(false)
-                },
-                onError: () => {
-                    toast({
-                        title: 'Error',
-                        description: 'Error in deleting experience',
-                        variant: 'destructive'
-                    })
-                    setDeletingId(undefined)
-                    setIsOpen(false)
-                }
-            })
+            );
+        } catch (error) {
+            toast({
+                title: 'Error',
+                description: 'An unexpected error occurred. Please try again.',
+                variant: 'destructive',
+            });
         }
-    }, [deletingId, resumeInfo, onUpdate, mutate, skill, skills])
-
-    const handleEdit = useCallback((skill: SkillType) => {
-        seteditingSkillId(skill?.id)
-        setSkill({
-            ...skill,
-            id: skill?.id,
-            docId: skill?.docId,
-            name: skill?.name,
-            rating: skill?.rating,
-        })
-        setIsEdit(true)
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    }, [skill, isEdit])
+    }, [tempSkills, resumeInfo, onUpdate, mutateAsync]);
 
     return (
-        <div>
-            {isEdit === false ? (
-                <>
-                    <div>
-                        <h2 className='font-bold text-lg'>Skills</h2>
-                        <p className='text-sm'>Enter your skills</p>
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className='my-5 grid grid-cols-2 gap-3'>
-                            <div>
-                                <Label>Skill</Label>
-                                <Input
-                                    name='name'
-                                    placeholder=''
-                                    required
-                                    value={skill.name}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <Label>Rating</Label>
-                                <Input
-                                    type='number'
-                                    name='rating'
-                                    min={0}
-                                    max={5}
-                                    placeholder='Enter rating (0-5)'
-                                    required
-                                    value={skill.rating}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-                        <div className='mt-2'>
-                            <Button type='submit' disabled={isPending}>
-                                {isPending && <LoaderCircle className='animate-spin' size='15px' />}
-                                Add
-                            </Button>
-                        </div>
-                    </form>
-                </>
-            ) : (
-                <div className='bg-primary/5 p-2 border border-primary rounded-lg' >
-                    <div>
-                        <h2 className='font-bold text-lg'>Edit Skill</h2>
-                    </div>
-                    <form onSubmit={handleEditSubmit}>
-                        <div className='my-5 grid grid-cols-2 gap-3'>
-                            <div>
-                                <Label>Skill</Label>
-                                <Input
-                                    name='name'
-                                    placeholder=''
-                                    required
-                                    value={skill.name}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <Label>Rating</Label>
-                                <Input
-                                    type='number'
-                                    name='rating'
-                                    min={0}
-                                    max={10}
-                                    placeholder='Enter rating (0-10)'
-                                    required
-                                    value={skill.rating}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                        </div>
-                        <div className='flex justify-start items-center gap-2 mt-2 ' >
-                            <Button
-                                type='submit'
-                                disabled={
-                                    isPending || resumeInfo?.status === 'archived' ? true : false
-                                }
+        <div className="space-y-6">
+            <div className='w-full'>
+                <h2 className='font-bold text-lg'>Skills</h2>
+                <p className='text-sm'>Add skills</p>
+            </div>
+            {/* Skill Cards Grid */}
+            <div  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {tempSkills.map((skill) => (
+                    <div
+                        key={skill.id}
+                        className="group flex flex-col justify-between items-center p-2 border rounded-lg bg-primary/5 hover:shadow-sm transition-all relative"
+                    >
+                        {/* Skill Name and Cross Icon */}
+                        <div className="flex justify-between items-center w-full">
+                            <span className="text-sm font-medium">{skill.name}</span>
+                            <button
+                                onClick={() => handleRemoveSkill(skill.id!)}
+                                className="text-red-500 hover:text-red-600 focus:outline-none"
                             >
-                                {isPending && <LoaderCircle className='animate-spin' size='15px' />}
-                                Save Changes
-                            </Button>
-                            <Button onClick={() => {
-                                setIsEdit(false)
-                                seteditingSkillId(undefined)
-                                setSkill(initialSkill)
-                                window.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth'
-                                })
-                            }}
-                                type='button'
-                                variant='destructive' >
-                                Cancel
-                            </Button>
+                                <X size={14} />
+                            </button>
                         </div>
-                    </form>
-                </div>
-            )}
-            <Dialog open={isOpen} onOpenChange={setIsOpen} >
-                <DialogTrigger asChild>
-                    {/* Trigger is managed by the Delete button */}
-                </DialogTrigger>
-                <DialogContent className='rounded-lg mx-auto max-w-sm  ' >
-                    <DialogTitle>Are you sure you want to delete this experience?</DialogTitle>
-                    <DialogDescription>This action cannot be undone.</DialogDescription>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleDelete} variant="destructive">
-                            {isDeletePending && (
-                                <LoaderCircle
-                                    className='animate-spin' />
-                            )}
-                            Delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-            <div className='my-5 w-full' >
-                {isLoading ? (
-                    <div>
-                        <div className='flex justify-center items-center gap-2' >
-                            <LoaderCircle className='animate-spin' size='30px' />
-                            <p>Fetching Skills...</p>
+
+                        {/* Star Rating on Hover */}
+                        <div className="w-full">
+                            <div className="flex gap-1 justify-start mt-1">
+                                {[...Array(5)].map((_, index) => (
+                                    <Star
+                                        key={index}
+                                        size={14}
+                                        className={
+                                            index < skill.rating!
+                                                ? 'text-[#FFD700] fill-[#FFD700]' // Bright yellow color
+                                                : 'text-gray-300'
+                                        }
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </div>
-                ) : (
-                    <>
-                        <h2 id='skills-sections' className='font-bold text-xl ' >Your Skills</h2>
-                        <div className='grid grid-cols-1 lg:grid-cols-2  gap-3 '>
-                            {data?.skills && data?.skills?.length > 0 ? (
-                                <>
-                                    {data?.skills?.map((skill, index) => (
-                                        <div key={index} className='border p-2 my-5 rounded-lg hover:border-primary hover:shadow-sm transition-all bg-primary/5 ' >
-                                            <div className='flex justify-between items-center' >
-                                                <h5 className='font-bold text-lg' >{skill?.name}</h5>
-                                            </div>
-                                            <div className='flex gap-3 mt-2 justify-start items-start' >
-                                                <Button onClick={() => handleEdit(skill as SkillType)} variant='outline' className="dark:text-white px-2 py-1 text-sm" >
-                                                    <div className='flex justify-center items-center gap-1' >
-                                                        <Pencil className=' text-primary hover:text-secondary ' size='4px' />
-                                                        <p className='text-[12px]' >Edit</p>
-                                                    </div>
-                                                </Button>
-                                                <Button onClick={() => {
-                                                    setDeletingId(skill.id!)
-                                                    setIsOpen(true)
-                                                }} variant="outline" className="dark:text-white px-1 py-1 text-[10px]" >
-                                                    <div className='flex justify-center items-center gap-1' >
-                                                        <Trash2
-                                                            className='text-rose-600 hover:text-rose-500 '
-                                                            size='4px'
-                                                        />
+                ))}
+            </div>
 
-                                                        <p className='text-[12px]' >Delete</p>
-                                                    </div>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <>
-                                    <div>
-                                        <p className='text-sm' >No skills to show...</p>
-                                    </div>
-                                </>
+            {/* Skill Input and Rating */}
+            <div className="flex items-center gap-4">
+                <div className="flex-1">
+                    <Label>Skill Name</Label>
+                    <Input
+                        placeholder="Enter a skill"
+                        value={skillName}
+                        onChange={(e) => setSkillName(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <Label>Rating</Label>
+                    <div className="flex gap-1">
+                        {[...Array(5)].map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleRating(index + 1)}
+                                className="focus:outline-none"
+                            >
+                                <Star
+                                    size={20}
+                                    className={
+                                        index < skillRating
+                                            ? 'text-[#FFD700] fill-[#FFD700] hover:text-[#FFC800]' // Bright yellow color
+                                            : 'text-gray-300 hover:text-[#FFD700]'
+                                    }
+                                />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
-                            )}
-                        </div>
-                    </>
-                )}
+            {/* Save Changes Button */}
+            <div className="mt-6">
+                <Button
+                    onClick={handleSaveChanges}
+                    disabled={isPending || tempSkills.length === 0}
+                    className="w-full"
+                >
+                    {isPending && <LoaderCircle className="animate-spin mr-2" size={16} />}
+                    Save Changes
+                </Button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SkillsForm
+export default React.memo(SkillsForm);

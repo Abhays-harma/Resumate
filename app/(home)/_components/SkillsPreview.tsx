@@ -5,13 +5,14 @@ import React, { FC } from 'react';
 
 interface Props {
     resumeInfo: ResumeDataType | undefined;
-    isLoading:boolean
+    isLoading: boolean;
 }
 
-const SkillsPreview: FC<Props> = ({ resumeInfo,isLoading }) => {
+const SkillsPreview: FC<Props> = ({ resumeInfo, isLoading }) => {
     if (isLoading) {
         return <SkeletonLoader />;
-      }
+    }
+
     return (
         <div className="w-full my-0">
             {/* Title */}
@@ -27,26 +28,27 @@ const SkillsPreview: FC<Props> = ({ resumeInfo,isLoading }) => {
             />
 
             {/* Skills Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 pt-1 my-0 mx-0">
+            <div id='skillId' className="grid grid-cols-2 lg:grid-cols-3 gap-3 pt-1 my-0 mx-0">
                 {resumeInfo?.skills?.map((skill, index) => (
                     <div
                         key={index}
-                        className="flex justify-between lg:justify-center gap-2 items-center"
-
+                        className="flex justify-between items-center gap-2"
                     >
                         {/* Skill Name */}
-                        <h5 className="text-[13px]">{skill?.name}</h5>
+                        <h5 className="text-[13px] flex-1 truncate">{skill?.name}</h5>
 
                         {/* Skill Bar */}
                         {skill?.name && skill?.rating && (
-                            <div className="bg-gray-200 w-[60px]">
-                                <div
-                                    className="h-2"
-                                    style={{
-                                        backgroundColor: resumeInfo?.themeColor ?? 'inherit',
-                                        width: `${(skill?.rating / 5) * 100}%`,
-                                    }}
-                                />
+                            <div className="flex-1 min-w-[60px]">
+                                <div className="bg-gray-200 w-full h-2">
+                                    <div
+                                        className="h-2"
+                                        style={{
+                                            backgroundColor: resumeInfo?.themeColor ?? 'inherit',
+                                            width: `${(skill?.rating / 5) * 100}%`,
+                                        }}
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>

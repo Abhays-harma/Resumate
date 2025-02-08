@@ -12,26 +12,22 @@ interface PropType {
     title: string,
     thumbnail: string | null,
     updatedAt: string | null,
+    setLoading:(loading: boolean) => void;
 }
 
-const ResumeItem: FC<PropType> = ({
-    themeColor,
-    status,
-    title,
-    documentId,
-    updatedAt,
-    thumbnail
-}) => {
+const ResumeItem:FC<PropType> = ({ themeColor, status, title, documentId, updatedAt, thumbnail, setLoading }) => {
+    const router = useRouter();
 
-    const router = useRouter()
     const goToDoc = () => {
-        router.push(`/dashboard/documents/${documentId}/edit`)
-    }
+        setLoading(true);
+        router.push(`/dashboard/documents/${documentId}/edit`);
+    };
+
     const docDate = useMemo(() => {
         if (!updatedAt) return null;
-        const formattedDate = format(updatedAt, "MMM dd,yyyy")
-        return formattedDate
-    }, [updatedAt])
+        return format(updatedAt, "MMM dd, yyyy");
+    }, [updatedAt]);
+
     return (
         <div className='w-full max-w-[164px] h-[194px] border transition-all cursor-pointer rounded-lg shadow-primary hover:shadow-md hover:border-primary '
             style={{ borderColor: themeColor || "" }}
@@ -85,4 +81,4 @@ const ResumeItem: FC<PropType> = ({
     )
 }
 
-export default ResumeItem
+export default ResumeItem;

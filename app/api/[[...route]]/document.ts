@@ -57,10 +57,10 @@ const documentRoute = new Hono()
         async (c) => {
             try {
                 console.log("Entered update route");
-                
-                const user = c.get('user')
-                const userId = user?.id
-                const { documentId } = c.req.valid('param')
+    
+                const user = c.get('user');
+                const userId = user?.id;
+                const { documentId } = c.req.valid('param');
                 const {
                     title,
                     status,
@@ -73,29 +73,32 @@ const documentRoute = new Hono()
                     education,
                     skills,
                     projects
-                } = c.req.valid('json')
+                } = c.req.valid('json');
+    
                 if (!documentId) {
                     return c.json({
                         success: false,
                         message: 'DocumentId is required',
-                    }, 400)
+                    }, 400);
                 }
-
+    
+                // Fetch the existing document
                 const [existingDocument] = await db.select().from(documentTable)
                     .where(
                         and(
                             eq(documentTable.documentId, documentId),
                             eq(documentTable.userId, userId),
                         )
-                    )
+                    );
+    
                 if (!existingDocument) {
                     return c.json({
                         success: false,
                         message: 'Document not found',
-                    }, 404)
+                    }, 404);
                 }
-                //updating the document table
-
+    
+                // Update the document table
                 const resumeUpdate = {
                     title: title,
                     thumbnail: thumbnail,
@@ -103,7 +106,8 @@ const documentRoute = new Hono()
                     themeColor: themeColor,
                     status: status,
                     currentPosition: currentPosition || 1,
-                }
+                };
+    
                 if (Object.keys(resumeUpdate)?.length > 0) {
                     await db.update(documentTable).set(resumeUpdate)
                         .where(
@@ -111,46 +115,45 @@ const documentRoute = new Hono()
                                 eq(documentTable.documentId, documentId),
                                 eq(documentTable.userId, userId),
                             )
-                        )
+                        );
                 }
-
-                // Updating or inserting personalInfo
+    
+                // Update or insert personalInfo
                 if (personalInfo) {
-                    //todo:check by movong exists in square brackets if it works to update
                     const exists = await db
                         .select()
                         .from(personalInfoTable)
                         .where(
                             eq(personalInfoTable.docId, existingDocument.id),
-                        )
+                        );
+    
                     if (exists.length > 0) {
                         await db
                             .update(personalInfoTable)
                             .set(personalInfo)
-                            .where(eq(personalInfoTable.docId, existingDocument.id))
+                            .where(eq(personalInfoTable.docId, existingDocument.id));
                     } else {
                         await db.insert(personalInfoTable)
                             .values({
                                 docId: existingDocument.id,
                                 ...personalInfo,
-                            })
+                            });
                     }
                 }
-
-                //updating or inserting experience
+    
+                // Update or insert experience
                 if (experience && Array.isArray(experience)) {
                     const existingExperience = await db
                         .select()
                         .from(experienceTable)
                         .where(
-                            eq(experienceTable.docId,
-                                existingDocument.id
-                            ),
-                        )
+                            eq(experienceTable.docId, existingDocument.id),
+                        );
+    
                     const existingExperienceMap = new Set(
                         existingExperience.map((exp) => exp.id)
-                    )
-
+                    );
+    
                     for (const exp of experience) {
                         const { id, ...data } = exp;
                         if (id !== undefined && existingExperienceMap.has(id)) {
@@ -162,30 +165,29 @@ const documentRoute = new Hono()
                                         eq(experienceTable.docId, existingDocument.id),
                                         eq(experienceTable.id, id),
                                     )
-                                )
+                                );
                         } else {
                             await db.insert(experienceTable).values({
                                 docId: existingDocument.id,
                                 ...data,
-                            })
+                            });
                         }
                     }
                 }
-
-                //updating or inerting projects
+    
+                // Update or insert projects
                 if (projects && Array.isArray(projects)) {
                     const existingProjects = await db
                         .select()
                         .from(projectTable)
                         .where(
-                            eq(projectTable.docId,
-                                existingDocument.id
-                            ),
-                        )
+                            eq(projectTable.docId, existingDocument.id),
+                        );
+    
                     const existingProjectsMap = new Set(
                         existingProjects.map((project) => project.id)
-                    )
-
+                    );
+    
                     for (const project of projects) {
                         const { id, ...data } = project;
                         if (id !== undefined && existingProjectsMap.has(id)) {
@@ -197,27 +199,29 @@ const documentRoute = new Hono()
                                         eq(projectTable.docId, existingDocument.id),
                                         eq(projectTable.id, id),
                                     )
-                                )
+                                );
                         } else {
                             await db.insert(projectTable).values({
                                 docId: existingDocument.id,
                                 ...data,
-                            })
+                            });
                         }
                     }
                 }
-
-                //updating or inserting education
+    
+                // Update or insert education
                 if (education && Array.isArray(education)) {
                     const existingEducation = await db
                         .select()
                         .from(educationTable)
                         .where(
-                            eq(educationTable.docId, existingDocument.id)
-                        )
+                            eq(educationTable.docId, existingDocument.id),
+                        );
+    
                     const existingEducationMap = new Set(
                         existingEducation.map((edu) => edu.id)
-                    )
+                    );
+    
                     for (const edu of education) {
                         const { id, ...data } = edu;
                         if (id !== undefined && existingEducationMap.has(id)) {
@@ -226,66 +230,48 @@ const documentRoute = new Hono()
                                 .set(data)
                                 .where(
                                     and(
-                                        eq(educationTable.docId,
-                                            existingDocument.id),
-                                        eq(educationTable.id, id)
+                                        eq(educationTable.docId, existingDocument.id),
+                                        eq(educationTable.id, id),
                                     )
-                                )
+                                );
                         } else {
                             await db.insert(educationTable).values({
                                 docId: existingDocument.id,
                                 ...data,
-                            })
+                            });
                         }
                     }
                 }
-
-                //updating or inserting skills
-
+    
+                // Replace all skills with the new skills
                 if (skills && Array.isArray(skills)) {
-                    const existingSkills = await db
-                        .select()
-                        .from(skillsTable)
+                    // Delete all existing skills for this document
+                    await db
+                        .delete(skillsTable)
                         .where(eq(skillsTable.docId, existingDocument.id));
-
-                    const existingSkillsMap = new Set(
-                        existingSkills.map((skill) => skill.id)
-                    )
-
+    
+                    // Insert the new skills
                     for (const skill of skills) {
-                        const { id, ...data } = skill
-                        if (id !== undefined && existingSkillsMap.has(id)) {
-                            await db
-                                .update(skillsTable)
-                                .set(data)
-                                .where(
-                                    and(
-                                        eq(skillsTable.docId, existingDocument.id),
-                                        eq(skillsTable.id, id),
-                                    )
-                                )
-                        } else {
-                            await db.insert(skillsTable).values({
-                                docId: existingDocument.id,
-                                ...data,
-                            })
-                        }
+                        const { id, ...data } = skill;
+                        await db.insert(skillsTable).values({
+                            docId: existingDocument.id,
+                            ...data,
+                        });
                     }
                 }
-
+    
                 return c.json({
                     success: true,
                     message: 'Updated Successfully',
-                }, 200)
-
-
+                }, 200);
+    
             } catch (error) {
                 console.log("Error in update route", error);
-
+    
                 return c.json({
                     success: false,
                     message: 'Failed to update document',
-                }, 500)
+                }, 500);
             }
         }
     )
@@ -499,6 +485,32 @@ const documentRoute = new Hono()
                 await db.delete(experienceTable)
                     .where(
                         eq(experienceTable.id, id)
+                    )
+                return c.json({
+                    success: true,
+                }, 200)
+                
+            } catch (error) {
+                return c.json({
+                    success: false,
+                    message: error,
+                }, 500)
+            }
+        }
+    )
+    .post(
+        '/deleteProject/:id',
+        zValidator('param', z.object({
+            id: z.coerce.number(),
+        })),
+        getAuthUser,
+        async (c) => {
+            try {
+                const { id } = c.req.valid('param')
+
+                await db.delete(projectTable)
+                    .where(
+                        eq(projectTable.id, id)
                     )
                 return c.json({
                     success: true,

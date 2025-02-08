@@ -7,7 +7,7 @@ import ProjectPreview from './ProjectsPreview';
 import EducationPreview from './EducationPreview';
 import SkillsPreview from './SkillsPreview';
 
-const A4_HEIGHT_PX = 1122; // Approximate A4 page height in pixels at 96 DPI (html2canvas default)
+const A4_HEIGHT_PX = 1172; // Approximate A4 page height in pixels at 96 DPI (html2canvas default)
 const MARGIN_PX = 40; // Matching margins from html2pdf options
 
 const ResumePreview = () => {
@@ -19,16 +19,25 @@ const ResumePreview = () => {
       const resumeElement = document.getElementById('resume-preview-id');
       if (!resumeElement) return;
 
-      const totalHeight = resumeElement.scrollHeight;
-      const maxHeight = A4_HEIGHT_PX - MARGIN_PX * 2; // Effective A4 height
+      // Get the actual height of the resume in the DOM
+      const totalHeight = resumeElement.getBoundingClientRect().height;
 
-      setIsPageBreaking(totalHeight > maxHeight);
+      // Calculate the scale factor (to match the PDF rendering)
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const scaledHeight = totalHeight / devicePixelRatio;
+
+      // Effective A4 height after considering margins
+      const maxHeight = A4_HEIGHT_PX - MARGIN_PX * 2;
+
+      // Check if content exceeds the A4 page
+      setIsPageBreaking(scaledHeight > maxHeight);
     };
 
     checkPageBreak();
     window.addEventListener('resize', checkPageBreak);
     return () => window.removeEventListener('resize', checkPageBreak);
   }, [resumeInfo]);
+  
 
   return (
     <div className="relative bg-white w-full min-h-screen px-10 py-4 dark:bg-card dark:border dark:border-b-gray-800 dark:border-x-gray-800 shadow-lg">
