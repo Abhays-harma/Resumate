@@ -83,7 +83,7 @@ const Footer = () => {
                 </div>
 
                 <div className="flex items-center space-x-6">
-                    <a href="www.linkedin.com/in/abhay-sharma-a312b1208" className="text-gray-500 hover:text-gray-700">
+                    <a href="https://www.linkedin.com/in/abhay-sharma-a312b1208" className="text-gray-500 hover:text-gray-700">
                         <Linkedin className="w-5 h-5" />
                     </a>
                     <a href="https://www.instagram.com/____abhay_sharma___/" className="text-gray-500 hover:text-gray-700">
