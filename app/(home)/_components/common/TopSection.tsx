@@ -6,10 +6,14 @@ import ThemeColor from './ThemeColor';
 import PreviewModal from '../PreviewModal';
 import DownloadResume from '../DownloadResume';
 import MoreOption from '../MoreOption';
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import ShareableResume from '../ShareableResume'; // Adjust the import path as necessary
+import { Button } from '@/components/ui/button'; // Assuming you have a Button component
 
 const TopSection = () => {
     const { resumeInfo, isLoading } = useResumeInfoContext();
     const [isMobile, setisMobile] = useState(false);
+    const [isShareDialogOpen, setIsShareDialogOpen] = useState(false); // State for share dialog
 
     useEffect(() => {
         const checkScreenWidth = () => {
@@ -51,9 +55,7 @@ const TopSection = () => {
                         onSave={(value) => console.log(value)}
                     />
                 </div>
-                <div
-                    className="flex justify-center items-center gap-1"
-                >
+                <div className="flex justify-center items-center gap-1">
                     <ThemeColor />
                     <PreviewModal />
                     <DownloadResume
@@ -61,7 +63,28 @@ const TopSection = () => {
                         status={resumeInfo?.status}
                         isLoading={isLoading}
                     />
-                    <MoreOption/>
+                    <MoreOption />
+                    {/* Share Icon and Dialog */}
+                    <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" onClick={() => setIsShareDialogOpen(true)}>
+                                {/* Replace with your share icon */}
+                                <span>Share</span>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className='rounded-lg mx-auto max-w-sm'>
+                            <DialogTitle>Share Your Resume</DialogTitle>
+                            <DialogDescription>
+                                Generate a shareable link for your resume.
+                            </DialogDescription>
+                            <ShareableResume />
+                            <DialogFooter>
+                                <Button variant="outline" onClick={() => setIsShareDialogOpen(false)}>
+                                    Close
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
         </>
