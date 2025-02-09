@@ -56,6 +56,7 @@ const MoreOption = () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
+            disabled={resumeInfo?.status === 'archived' ? true : false || isLoading}
             variant="secondary"
             size="icon"
             className="bg-white border

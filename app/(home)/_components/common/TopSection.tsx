@@ -1,5 +1,5 @@
 import { useResumeInfoContext } from '@/context/resume-info-provider';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Share2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import ResumeTitle from '../ResumeTitle';
 import ThemeColor from './ThemeColor';
@@ -63,13 +63,12 @@ const TopSection = () => {
                         status={resumeInfo?.status}
                         isLoading={isLoading}
                     />
-                    <MoreOption />
                     {/* Share Icon and Dialog */}
                     <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button variant="outline" onClick={() => setIsShareDialogOpen(true)}>
+                            <Button disabled={resumeInfo?.status === 'archived' ? true : false || isLoading} variant="outline" onClick={() => setIsShareDialogOpen(true)}>
                                 {/* Replace with your share icon */}
-                                <span>Share</span>
+                                <span><Share2 /></span>
                             </Button>
                         </DialogTrigger>
                         <DialogContent className='rounded-lg mx-auto max-w-sm'>
@@ -85,6 +84,7 @@ const TopSection = () => {
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
+                    <MoreOption />
                 </div>
             </div>
         </>
