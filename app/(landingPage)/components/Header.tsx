@@ -38,7 +38,7 @@ const Header = () => {
         <div className='flex flex-col gap-1 w-full' >
             <div className='bg-white dark:bg-gray-900 z-[9] shadow-sm w-full sticky top-0'>
                 <div>
-                    <div className=' flex justify-between items-center py-2 px-5 mx-auto max-w-7xl w-full' >
+                    <div className=' flex justify-between items-center py-2 px-2 mx-auto max-w-7xl w-full' >
                         {/* {left} */}
                         <div className='flex items-center justify-center gap-3 lg:gap-20 ' >
                             <Link
@@ -73,7 +73,7 @@ const Header = () => {
                         ) : null}
 
                         {/* {right section} */}
-                        <div className='flex items-center gap-4'>
+                        <div className='flex items-center gap-1'>
 
                             {/* Theme Toggle */}
                             <DropdownMenu>
