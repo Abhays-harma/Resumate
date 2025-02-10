@@ -4,11 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { useTheme } from "next-themes"
 import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { Button } from '@/components/ui/button';
+import { usePathname } from 'next/navigation'; // Import usePathname
+import { Sun, Moon } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const Header = () => {
     const { setTheme } = useTheme()
-
     const [isMobile, setIsMobile] = useState(false)
+    const pathname = usePathname(); // Get the current pathname
 
     useEffect(() => {
         const checkScreenWidth = () => {
@@ -25,6 +28,11 @@ const Header = () => {
             window.removeEventListener('resize', checkScreenWidth);
         };
     }, []);
+
+    // Function to determine if a link is active
+    const isActive = (href: string) => {
+        return pathname === href;
+    };
 
     return (
         <div className='flex flex-col gap-1 w-full' >
@@ -44,19 +52,19 @@ const Header = () => {
                         {!isMobile && window.innerWidth > 650 ? (
                             <div className='flex gap-10 justify-center items-center' >
                                 <Link
-                                    className='mt-1'
+                                    className={`mt-1 ${isActive('/aiFeatures') ? 'text-blue-500 underline' : ''}`}
                                     href='/aiFeatures'
                                 >
                                     Ai Features
                                 </Link>
                                 <Link
-                                    className='mt-1'
+                                    className={`mt-1 ${isActive('/resources') ? 'text-blue-500 underline' : ''}`}
                                     href='/resources'
                                 >
-                                    Resorces
+                                    Resources
                                 </Link>
                                 <Link
-                                    className='mt-1'
+                                    className={`mt-1 ${isActive('/about') ? 'text-blue-500 underline' : ''}`}
                                     href='/about'
                                 >
                                     About
@@ -66,6 +74,28 @@ const Header = () => {
 
                         {/* {right section} */}
                         <div className='flex items-center gap-4'>
+
+                            {/* Theme Toggle */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" size="icon">
+                                        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                        <span className="sr-only">Toggle theme</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                                        Light
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                                        Dark
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                                        System
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
 
                             <Button
                                 variant='outline'
@@ -91,19 +121,19 @@ const Header = () => {
                     {isMobile ? (
                         <>
                             <Link
-                                className='mt-1'
+                                className={`mt-1 ${isActive('/aiFeatures') ? 'text-blue-500 underline' : ''}`}
                                 href='/aiFeatures'
                             >
                                 Ai Features
                             </Link>
                             <Link
-                                className='mt-1'
+                                className={`mt-1 ${isActive('/resources') ? 'text-blue-500 underline' : ''}`}
                                 href='/resources'
                             >
-                                Resorces
+                                Resources
                             </Link>
                             <Link
-                                className='mt-1'
+                                className={`mt-1 ${isActive('/about') ? 'text-blue-500 underline' : ''}`}
                                 href='/about'
                             >
                                 About
@@ -116,4 +146,4 @@ const Header = () => {
     )
 }
 
-export default Header
+export default Header;

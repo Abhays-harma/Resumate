@@ -9,26 +9,26 @@ import Footer from './components/Footer';
 
 const Page = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-50">
+    <div className="min-h-screen flex flex-col items-center">
       <div className="w-full max-w-5xl px-6 pt-16 mt-10 text-center">
         <div className="flex flex-col gap-6 justify-center">
-          <h1 className="text-5xl font-extrabold text-gray-800">
+          <h1 className="text-5xl font-extrabold text-gray-800 dark:text-white">
             Get dream jobs with our
             <span className="text-blue-600"> AI </span>
             <span className="text-green-500"> POWERED </span>
             resume builder
           </h1>
-          <h5 className="text-lg text-gray-600">
+          <h5 className="text-lg text-gray-600 dark:text-white">
             Build a professional resume with our free builder and share it with a shareable link
           </h5>
           <div className="flex gap-4 justify-center items-center mt-8">
             <Button className="px-6 py-3 text-lg font-medium bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg">
               <RegisterLink className='text-white' >Get Started</RegisterLink>
             </Button>
-            {/* <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
+            <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
               <Video />
               Watch Video
-            </Button> */}
+            </Button>
           </div>
           <div className="max-w-4xl mx-auto px-4 py-8">
             {/* Star Rating */}
@@ -39,7 +39,7 @@ const Page = () => {
             </div>
 
             {/* Testimonial Text */}
-            <p className="text-center text-2xl font-semibold mb-8 text-gray-800 leading-tight">
+            <p className="text-center text-2xl font-semibold mb-8 text-gray-800 dark:text-white leading-tight">
               Resumate is an awesome AI-based resume builder that includes templates to help you design a resume that is sure to check the boxes when it comes to applicant tracking systems. This is a great jumping off point to kickstart a new resume.
             </p>
 
@@ -51,8 +51,8 @@ const Page = () => {
                 className="w-12 h-12 rounded-full"
               />
               <div className="flex flex-col">
-                <span className="font-semibold text-gray-800">Abhay Sharma</span>
-                <span className="text-gray-600">Career Contributor</span>
+                <span className="font-semibold text-gray-800 dark:text-blue-500">Abhay Sharma</span>
+                <span className="text-gray-600 dark:text-white">Career Contributor</span>
               </div>
               <img
                 src="https://cdn.brandfetch.io/id78YVtrRp/theme/dark/logo.svg?c=1bfwsmEH20zzEfSNTed"
@@ -64,15 +64,15 @@ const Page = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <p className="text-gray-600 mb-2">Total Users (this is annoying to update)</p>
+                <p className="text-gray-600 mb-2 dark:text-white">Total Users (this is annoying to update)</p>
                 <p className="text-4xl font-bold text-blue-500">3,049,450</p>
               </div>
               <div className="text-center">
-                <p className="text-gray-600 mb-2">Interview Rate</p>
+                <p className="text-gray-600 mb-2 dark:text-white">Interview Rate</p>
                 <p className="text-4xl font-bold text-blue-500">62.18%</p>
               </div>
               <div className="text-center">
-                <p className="text-gray-600 mb-2">Avg. User Review</p>
+                <p className="text-gray-600 mb-2 dark:text-white">Avg. User Review</p>
                 <p className="text-4xl font-bold text-blue-500">8.23/10</p>
               </div>
             </div>
@@ -172,23 +172,23 @@ const Page = () => {
           <div className="space-y-12">
             <div>
               <div className="flex items-center gap-4 mb-4">
-                <h3 className="text-2xl text-blue-500 font-semibold">ATS Keyword Targeting</h3>
+                <h3 className="text-2xl text-blue-500 font-semibold dark:text-white">ATS Keyword Targeting</h3>
               </div>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-white">
                 Instantly improve your chances of being selected for an interview by using the targeted keywords identified by Resumate.
               </p>
             </div>
 
             <div>
               <h3 className="text-2xl text-blue-500 font-semibold mb-4">Real Time Content Analysis</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-white">
                 Resumate instantly identifies common content errors such as missing bullet points, buzz words, useful content, and more.
               </p>
             </div>
 
             <div>
               <h3 className="text-2xl text-blue-500 font-semibold mb-4">The Resumate Score</h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-white">
                 The Resumate Score critiques how well you've created your resume across 23 criteria points - translating the result into a score rated from 1 - 100.
               </p>
             </div>
@@ -204,12 +204,9 @@ const Page = () => {
             <h1 className="text-4xl text-blue-500  font-bold mb-4">
               Resumate Does More Than Any Other Resume Builder.
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-white mb-6">
               Resumate makes it easy to get the help you need, stay organized, and take on any challenge. Its clear, simple design just makes sense — especially if you have many applications. So things like managing multiple resumes and keeping track of your files are a breeze.
             </p>
-            <button className="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-              Explore Resumate User Guides
-            </button>
           </div>
 
           {/* Features Grid - Takes full width on mobile, 60% on desktop */}
@@ -222,7 +219,7 @@ const Page = () => {
                   alt="Custom URL sharing interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl text-gray-900 font-semibold">Custom URL for Sharing</h2>
+                <h2 className="text-xl text-gray-900 dark:text-white font-semibold">Custom URL for Sharing</h2>
               </div>
 
               {/* AI Keyword Tailoring Card */}
@@ -232,7 +229,7 @@ const Page = () => {
                   alt="AI Keyword Tailoring interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl text-gray-900 font-semibold">AI Keyword Tailoring</h2>
+                <h2 className="text-xl text-gray-900 dark:text-white font-semibold">AI Keyword Tailoring</h2>
               </div>
 
               {/* AI Keyword Targeting Card */}
@@ -242,7 +239,7 @@ const Page = () => {
                   alt="AI Keyword Targeting interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl text-gray-900 font-semibold">AI Keyword Targeting</h2>
+                <h2 className="text-xl text-gray-900 dark:text-white font-semibold">AI Keyword Targeting</h2>
               </div>
 
               {/* AI Summary Writer Card */}
@@ -252,7 +249,7 @@ const Page = () => {
                   alt="AI Summary Writer interface"
                   className="w-full rounded-lg shadow-sm mb-3"
                 />
-                <h2 className="text-xl text-gray-900 font-semibold">AI Summary Writer</h2>
+                <h2 className="text-xl text-gray-900 dark:text-white font-semibold">AI Summary Writer</h2>
               </div>
             </div>
           </div>
