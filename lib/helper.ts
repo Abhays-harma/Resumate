@@ -23,7 +23,7 @@ export const generateThumbnail = async () => {
       padding: resumeElement.style.padding,
       overflow: resumeElement.style.overflow,
     };
-    resumeElement.style.padding = '30px'; // Add padding to ensure content doesn't touch the edges
+    resumeElement.style.padding = '20px'; // Add padding to ensure content doesn't touch the edges
     resumeElement.style.overflow = 'visible'; // Ensure no content is hidden due to overflow
 
     const pixelRatio = window.devicePixelRatio || 1; // Get device pixel ratio
