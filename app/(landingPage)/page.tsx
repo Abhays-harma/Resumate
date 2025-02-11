@@ -6,6 +6,7 @@ import { Video } from 'lucide-react';
 import Image from 'next/image';
 import { Check, X } from 'lucide-react';
 import Footer from './components/Footer';
+import Link from 'next/link';
 
 const Page = () => {
   return (
@@ -25,10 +26,12 @@ const Page = () => {
             <Button className="px-6 py-3 text-lg font-medium bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg">
               <RegisterLink className='text-white' >Get Started</RegisterLink>
             </Button>
-            <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
-              <Video />
-              Watch Video
-            </Button>
+            <Link href='https://www.dropbox.com/scl/fi/0nc6o9qnq7i9imxp8u4tt/Screen-Recording-2025-02-11-104338.mp4?rlkey=ac9x9k0bxyh5vl7h362kp49st&st=kiacn7b1&dl=0'>
+              <Button className="px-6 py-3 text-lg font-medium bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200 shadow-lg flex items-center gap-2">
+                <Video />
+                Watch Video
+              </Button>
+            </Link>
           </div>
           <div className="max-w-4xl mx-auto px-4 py-8">
             {/* Star Rating */}
@@ -255,7 +258,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      
+
     </div>
   );
 };

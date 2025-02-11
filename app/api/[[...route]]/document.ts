@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from "@/db";
 import { documentTable, educationTable, experienceTable, personalInfoTable, projectTable, skillsTable } from "@/db/schema";
 import { and, eq, ne } from "drizzle-orm";
-import { updateSchema } from "@/db/schema/document";
+import { UpdateDocumentSchema, updateSchema } from "@/db/schema/document";
 
 const documentRoute = new Hono()
     .post(
@@ -143,6 +143,12 @@ const documentRoute = new Hono()
     
                 // Update or insert experience
                 if (experience && Array.isArray(experience)) {
+                    const validatedExperience = experience.map((exp) => ({
+                        ...exp,
+                        startDate: exp.startDate || null, // Replace empty string with null
+                        endDate: exp.endDate || null,     // Replace empty string with null
+                    }));
+    
                     const existingExperience = await db
                         .select()
                         .from(experienceTable)
@@ -154,7 +160,7 @@ const documentRoute = new Hono()
                         existingExperience.map((exp) => exp.id)
                     );
     
-                    for (const exp of experience) {
+                    for (const exp of validatedExperience) {
                         const { id, ...data } = exp;
                         if (id !== undefined && existingExperienceMap.has(id)) {
                             await db
@@ -175,8 +181,14 @@ const documentRoute = new Hono()
                     }
                 }
     
-                // Update or insert projects
+                // Update or insert projects (with date validation)
                 if (projects && Array.isArray(projects)) {
+                    const validatedProjects = projects.map((proj) => ({
+                        ...proj,
+                        startDate: proj.startDate || null, // Replace empty string with null
+                        endDate: proj.endDate || null,     // Replace empty string with null
+                    }));
+    
                     const existingProjects = await db
                         .select()
                         .from(projectTable)
@@ -188,8 +200,8 @@ const documentRoute = new Hono()
                         existingProjects.map((project) => project.id)
                     );
     
-                    for (const project of projects) {
-                        const { id, ...data } = project;
+                    for (const proj of validatedProjects) {
+                        const { id, ...data } = proj;
                         if (id !== undefined && existingProjectsMap.has(id)) {
                             await db
                                 .update(projectTable)
@@ -274,7 +286,7 @@ const documentRoute = new Hono()
                 }, 500);
             }
         }
-    )
+    )    
     .get(
         '/all',
         getAuthUser,
