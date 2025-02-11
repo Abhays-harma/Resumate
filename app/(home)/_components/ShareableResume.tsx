@@ -31,10 +31,10 @@ const ShareResumeLink = () => {
   };
 
   return (
-    <div className="max-w-md w-full bg-white rounded-lg shadow p-6 space-y-4">
-      <h2 className="text-xl font-semibold text-gray-900">Share this resume</h2>
+    <div className="max-w-md w-full rounded-lg shadow p-6 space-y-4">
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Share this resume</h2>
 
-      <div className="flex items-center space-x-2 text-sm text-gray-600">
+      <div className="flex items-center dark:text-white space-x-2 text-sm text-gray-600">
         <Globe size={16} />
         <span>Anyone with the link</span>
         <span className="text-blue-600">can view</span>
@@ -47,7 +47,7 @@ const ShareResumeLink = () => {
         <div className="flex items-center border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500">
           <input
             type="text"
-            className="flex-1 p-3 bg-gray-50 text-gray-600 rounded-lg focus:outline-none"
+            className="flex-1 p-3 dark:text-white text-gray-600 rounded-lg focus:outline-none"
             value={baseUrl + (customLink || defaultLink)}
             readOnly
           />
