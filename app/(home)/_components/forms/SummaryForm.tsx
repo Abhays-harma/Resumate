@@ -9,7 +9,7 @@ import { toast } from '@/hooks/use-toast'
 import { chatSession } from '@/lib/gemini'
 import { generateThumbnail } from '@/lib/helper'
 import { ResumeDataType } from '@/types/resume.type'
-import { LoaderCircle, Sparkles } from 'lucide-react'
+import { LoaderCircle, Sparkles, Text } from 'lucide-react'
 import React, { FC, useState } from 'react'
 
 interface Prop {
@@ -75,8 +75,8 @@ const SummaryForm: FC<Prop> = ({
             const result = await chatSession.sendMessage(prompt);
             const responseText = result.response.text()
             const responseObject: Response = JSON?.parse(responseText)
-            console.log("Response object : ",responseObject);
-            
+            console.log("Response object : ", responseObject);
+
             setAiGeneratedSummary(responseObject)
         } catch (error) {
             console.log("Error in generateSummary : ", error);
@@ -129,7 +129,10 @@ const SummaryForm: FC<Prop> = ({
     return (
         <div className='w-full' >
             <div className='w-full' >
-                <h2 className='font-bold text-lg' >Summary</h2>
+                <div className='flex items-center gap-2' >
+                    <h2 className='font-bold text-lg' >Summary</h2>
+                    <span><Text className='text-blue-600 mt-1' size='20' /></span>
+                </div>
                 <p className='text-sm' >Provide a description that highlights your skills, experience, and professional goals</p>
             </div>
             <div>

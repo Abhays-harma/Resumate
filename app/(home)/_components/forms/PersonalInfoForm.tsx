@@ -7,7 +7,7 @@ import useUpdateDocument from '@/features/use-update-document';
 import { toast } from '@/hooks/use-toast';
 import { generateThumbnail } from '@/lib/helper';
 import { PersonalInfoType } from '@/types/resume.type';
-import { LoaderCircle } from 'lucide-react';
+import { Fingerprint, LoaderCircle } from 'lucide-react';
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
 interface Prop {
@@ -88,7 +88,10 @@ const PersonalInfoForm: FC<Prop> = ({ handleNext }) => {
   return (
     <div>
       <div className='w-full' >
-        <h2 className='font-bold text-lg' >Personal Information</h2>
+        <div className='flex items-center gap-2'>
+          <h2 className='font-bold text-lg' >Personal Information </h2>
+          <span><Fingerprint className='text-green-500' size='20' /></span>
+        </div>
         <p className='text-sm' >Get started with personal information</p>
       </div>
       <div>
