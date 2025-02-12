@@ -66,7 +66,7 @@ const TopSection = () => {
                     {/* Share Icon and Dialog */}
                     <Dialog open={isShareDialogOpen} onOpenChange={setIsShareDialogOpen}>
                         <DialogTrigger asChild>
-                            <Button disabled={resumeInfo?.status === 'archived' ? true : false || isLoading} variant="outline" onClick={() => setIsShareDialogOpen(true)}>
+                            <Button className='bg-white border gap-1 dark:bg-gray-800 flex items-center justify-center' disabled={resumeInfo?.status === 'archived' ? true : false || isLoading} variant="outline" onClick={() => setIsShareDialogOpen(true)}>
                                 {/* Replace with your share icon */}
                                 <span><Share2 /></span>
                             </Button>

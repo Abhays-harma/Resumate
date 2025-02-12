@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from "@/db";
 import { documentTable, educationTable, experienceTable, personalInfoTable, projectTable, skillsTable } from "@/db/schema";
 import { and, eq, ne } from "drizzle-orm";
-import { UpdateDocumentSchema, updateSchema } from "@/db/schema/document";
+import { updateSchema } from "@/db/schema/document";
 
 const documentRoute = new Hono()
     .post(
@@ -109,6 +109,7 @@ const documentRoute = new Hono()
                 };
     
                 if (Object.keys(resumeUpdate)?.length > 0) {
+                    console.log("Updating document table with:", resumeUpdate);
                     await db.update(documentTable).set(resumeUpdate)
                         .where(
                             and(
@@ -120,6 +121,7 @@ const documentRoute = new Hono()
     
                 // Update or insert personalInfo
                 if (personalInfo) {
+                    console.log("Updating personalInfo:", personalInfo);
                     const exists = await db
                         .select()
                         .from(personalInfoTable)
@@ -143,6 +145,7 @@ const documentRoute = new Hono()
     
                 // Update or insert experience
                 if (experience && Array.isArray(experience)) {
+                    console.log("Updating experience:", experience);
                     const validatedExperience = experience.map((exp) => ({
                         ...exp,
                         startDate: exp.startDate || null, // Replace empty string with null
@@ -183,6 +186,7 @@ const documentRoute = new Hono()
     
                 // Update or insert projects (with date validation)
                 if (projects && Array.isArray(projects)) {
+                    console.log("Updating projects:", projects);
                     const validatedProjects = projects.map((proj) => ({
                         ...proj,
                         startDate: proj.startDate || null, // Replace empty string with null
@@ -257,6 +261,7 @@ const documentRoute = new Hono()
     
                 // Replace all skills with the new skills
                 if (skills && Array.isArray(skills)) {
+                    console.log("Updating skills:", skills);
                     // Delete all existing skills for this document
                     await db
                         .delete(skillsTable)
@@ -277,16 +282,17 @@ const documentRoute = new Hono()
                     message: 'Updated Successfully',
                 }, 200);
     
-            } catch (error) {
+            } catch (error:any) {
                 console.log("Error in update route", error);
     
                 return c.json({
                     success: false,
                     message: 'Failed to update document',
+                    error: error.message, // Include the error message for more details
                 }, 500);
             }
         }
-    )    
+    ) 
     .get(
         '/all',
         getAuthUser,

@@ -14,6 +14,7 @@ const useUpdateDocument=()=>{
     const muation=useMutation({
         mutationFn: async (json:UpdateDocumentSchema)=>{
             console.log('Entered in useUpdateDocument');
+            console.log("Received projects data:", json);
             const response=await client.api.documents.update[":documentId"].$post({
                 param:{
                     documentId:documentId,

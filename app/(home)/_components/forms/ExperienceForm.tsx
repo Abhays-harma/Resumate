@@ -98,11 +98,11 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
     const target = e.target as HTMLInputElement | HTMLTextAreaElement;
     const { name, value, type } = target;
     const checked = ("checked" in target) ? target.checked : false;
-    if(name==='currentlyWorking'){
+    if (name === 'currentlyWorking') {
       setIsCurrentlyWorking(checked)
     }
     setExperience({ ...experience, [name]: type === 'checkbox' ? checked : value });
-  },[experience,isCurrentlyWorking]);
+  }, [experience, isCurrentlyWorking]);
 
   const [editingExpId, seteditingExpId] = useState<number | undefined>(undefined);
 
@@ -132,21 +132,13 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
     });
   }, [isEdit, experience])
 
-  
+
 
   const handleEditSubmit = useCallback(async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     const newExperience = { ...experience, workSummary: content }
-    const updatedExperiences = resumeInfo?.experiences?.filter((exp)=>exp?.id!=editingExpId)
-    const newUpdatedExperiences=[...(updatedExperiences ?? []),newExperience]
-
-    onUpdate({
-      ...resumeInfo,
-      experiences: newUpdatedExperiences,
-      title: resumeInfo?.title || 'Untitled Resume',
-      status: resumeInfo?.status ?? 'private',
-      summary: resumeInfo?.summary || '',
-    })
+    const updatedExperiences = resumeInfo?.experiences?.filter((exp) => exp?.id != editingExpId)
+    const newUpdatedExperiences = [...(updatedExperiences ?? []), newExperience]
 
     const thumbnail = await generateThumbnail();
     const currentNo = resumeInfo?.currentPosition ? resumeInfo?.currentPosition : 1;
@@ -159,6 +151,13 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
       },
       {
         onSuccess: () => {
+          onUpdate({
+            ...resumeInfo,
+            experiences: newUpdatedExperiences,
+            title: resumeInfo?.title || 'Untitled Resume',
+            status: resumeInfo?.status ?? 'private',
+            summary: resumeInfo?.summary || '',
+          })
           toast({
             title: 'Success',
             description: 'Updated Successfully',
@@ -167,11 +166,11 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
           setExperience(initialExperience)
           setContent('')
           setIsEdit(false)
-          
 
-          const experiencesSection=document.getElementById('experiences-section')
-          if(experiencesSection){
-            experiencesSection.scrollIntoView({behavior:'smooth'})
+
+          const experiencesSection = document.getElementById('experiences-section')
+          if (experiencesSection) {
+            experiencesSection.scrollIntoView({ behavior: 'smooth' })
           }
         },
 
@@ -474,8 +473,8 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
                 seteditingExpId(undefined)
                 setExperience(initialExperience)
                 window.scrollTo({
-                  top:0,
-                  behavior:'smooth'
+                  top: 0,
+                  behavior: 'smooth'
                 })
               }}
                 type='button'
@@ -515,7 +514,7 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
           </div>
         ) : (
           <>
-            <div  className='flex gap-1 justify-start items-center' >
+            <div className='flex gap-1 justify-start items-center' >
               <h2 id='experiences-section' className='text-xl font-bold' >Your Experiences</h2>
               <ChevronDown />
             </div>

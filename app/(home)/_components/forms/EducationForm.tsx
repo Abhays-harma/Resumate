@@ -63,7 +63,7 @@ const EducationForm: FC<Prop> = ({ handleNext }) => {
 
     const handleSubmit = useCallback(async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        console.log("Education is  : ", education)
+        // console.log("Education is  : ", education)
         const updatedEducations = [...(resumeInfo?.educations ?? []), education]
 
         onUpdate({

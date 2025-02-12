@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,7 +52,7 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
     if (name === 'currentlyWorking') {
       setProject((prev) => ({ ...prev, [name]: checked }));
     } else {
-      setProject((prev) => ({ ...prev, [name]: value }));
+      setProject((prev) => ({ ...prev, [name]: value || '' })); // Ensure value is never null
     }
   }, []);
 
@@ -74,7 +72,15 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
 
   const handleEdit = (project: ProjectType) => {
     setEditingProjectId(project.id);
-    setProject(project);
+    setProject({
+      ...project,
+      title: project.title || '',
+      organization: project.organization || '',
+      description: project.description || '',
+      startDate: project.startDate || '',
+      endDate: project.endDate || '',
+      projectLink: project.projectLink || '',
+    });
     setTechnologies(project.technologies || []);
     setIsEdit(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -83,19 +89,19 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
+
     const newProject = { ...project, technologies };
-    const updatedProjects = isEdit
-      ? resumeInfo?.projects?.map((p) => (p.id === editingProjectId ? newProject : p)) || []
-      : [...(resumeInfo?.projects || []), newProject];
+
+    const updatedProjects = [...(resumeInfo?.projects ?? []), newProject]
 
     const thumbnail = await generateThumbnail();
-    const currentNo = resumeInfo?.currentPosition ? resumeInfo.currentPosition + 1 : 1;
+    const currentNo = resumeInfo?.currentPosition ? resumeInfo.currentPosition : 1
 
     await mutateAsync(
       {
-        thumbnail,
-        currentPosition: currentNo,
         projects: updatedProjects,
+        thumbnail: thumbnail,
+        currentPosition: currentNo,
       },
       {
         onSuccess: () => {
@@ -106,7 +112,6 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
             status: resumeInfo?.status ?? 'private',
             summary: resumeInfo?.summary || '',
           });
-          
           toast({
             title: 'Success',
             description: isEdit ? 'Project updated successfully' : 'Project added successfully',
@@ -128,7 +133,6 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
   }, [project, technologies, resumeInfo, isEdit, editingProjectId, onUpdate, mutateAsync, refetch]);
 
   const handleDelete = useCallback(() => {
-    console.log("id is : ", deletingId);
     if (deletingId) {
       const updatedProjects = resumeInfo?.projects?.filter((p) => p.id !== deletingId) || [];
       deleteProject(deletingId, {
@@ -334,7 +338,6 @@ const ProjectForm: React.FC<Props> = ({ handleNext }) => {
                         </Button>
                         <Button
                           onClick={() => {
-                            console.log('Setting deletingId to:', project.id); // Debugging log
                             setDeletingId(project.id!);
                             setIsOpen(true);
                           }}

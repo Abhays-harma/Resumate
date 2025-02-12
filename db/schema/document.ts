@@ -76,18 +76,20 @@ export const updateSchema = z.object({
         name: z.string().min(1, "Skill name cannot be empty").optional(),
         rating: z.number().min(0).max(5).optional(),
     })).optional(),
-    projects: z.array(z.object({
-        id: z.number().optional(),
-        title: z.string().min(1, "Project title cannot be empty").optional(),
-        organization: z.string().optional(),
-        startDate: z.string().optional(),
-        endDate: z.string().optional(),
-        currentlyWorking: z.boolean().optional(),
-        technologies: z.array(z.string()).optional(),
-        description: z.string().optional(),
-        projectLink: z.string().url('Invalid URL').optional(),
-    })).optional(),
+    projects: z.array(
+        z.object({
+            id: z.number().optional(),
+            title: z.string().min(1, "Project title cannot be empty").optional(),
+            organization: z.string().optional(),
+            startDate: z.string().optional(),
+            endDate: z.string().optional(),
+            currentlyWorking: z.boolean().optional(),
+            technologies: z.array(z.string()).optional(),
+            description: z.string().optional(),
+            projectLink: z.string().url('Invalid URL').optional(),
+        })
+    ).optional(),
 });
 
 
-export type UpdateDocumentSchema=z.infer<typeof updateSchema>;
+export type UpdateDocumentSchema = z.infer<typeof updateSchema>;
