@@ -22,7 +22,12 @@ const Page = () => {
           <h5 className="text-lg text-gray-600 dark:text-white">
             Build a professional resume with our free builder and share it with a shareable link
           </h5>
-          <div className="flex gap-4 justify-center items-center mt-8">
+          <Link href='https://resumate-ashy.vercel.app/app.resumate.ai/s/1b944898-67df-48cd-a4fc-fa0c6bc4fee8' >
+            <Button variant='outline' >
+              View Sample Resume
+            </Button>
+          </Link>
+          <div className="flex gap-4 justify-center items-center mt-2">
             <Button className="px-6 py-3 text-lg font-medium bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-lg">
               <RegisterLink className='text-white' >Get Started</RegisterLink>
             </Button>

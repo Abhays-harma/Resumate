@@ -2,10 +2,9 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { LoaderCircle, Pencil, Trash2, X } from 'lucide-react'
+import { LoaderCircle, Pencil, Trash2, X, Sparkles } from 'lucide-react'
 import React, { FC, useCallback, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react';
-
 import JoditEditor from 'jodit-react';
 import { useResumeInfoContext } from '@/context/resume-info-provider'
 import { generateThumbnail } from '@/lib/helper'
@@ -15,9 +14,19 @@ import { toast } from '@/hooks/use-toast'
 import useGetExperiences from '@/features/use-get-experiences'
 import useDeleteExperience from '@/features/use-delete-experience'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { chatSession } from '@/lib/gemini';
 
 interface Prop {
   handleNext: () => void,
+}
+
+interface Summary {
+  level: string;
+  data: string;
+}
+
+interface Response {
+  summaries: Summary[];
 }
 
 const ExperienceForm: FC<Prop> = ({ handleNext }) => {
@@ -132,7 +141,73 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
     });
   }, [isEdit, experience])
 
+  const [loading, setLoading] = useState(false);
+  const [aiGeneratedSummary, setAiGeneratedSummary] = useState<Response | undefined>(undefined);
 
+  const prompt = `Position Title: ${experience?.title}  
+Company Name: ${experience?.companyName}  
+City: ${experience?.city}  
+State: ${experience?.state}  
+Start Date: ${experience?.startDate}  
+End Date: ${experience?.endDate}  
+Currently Working: ${experience?.currentlyWorking ? 'Yes' : 'No'}  
+
+Based on the experience details, please generate concise and complete summaries in JSON format. Ensure the output contains a summaries array, where each item is an object with two fields: level and data.  
+
+The level field represents experience levels: Fresher, Mid, or Experienced.  
+The data field contains a very short summary limited to 1 to 2 lines in paragraph form, incorporating relevant responsibilities, achievements, and skills without any placeholders or gaps.  
+
+Each summary should be engaging, reflect a personal tone, and highlight unique strengths and aspirations aligned with the role and industry standards.  
+
+Example response structure:  
+{
+    "summaries": [
+        {
+            "level": "Fresher",
+            "data": "Gained hands-on experience in software development, contributing to team projects and learning industry best practices."
+        },
+        {
+            "level": "Mid",
+            "data": "Managed end-to-end project delivery, collaborating with cross-functional teams to achieve business goals."
+        },
+        {
+            "level": "Experienced",
+            "data": "Led a team of developers, driving innovation and delivering high-quality solutions for enterprise clients."
+        }
+    ]
+} ans note that please give three diffrent summaries i.e fresher,mid and experienced`;
+
+  const generateExperienceSummary = async () => {
+    try {
+      if (!experience.title || !experience.companyName || !experience.startDate) {
+        toast({
+          title: 'Error',
+          description: 'Please fill in the position title, company name, and start date to proceed.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      setLoading(true);
+      const result = await chatSession.sendMessage(prompt);
+      const responseText = result.response.text();
+      const responseObject: Response = JSON.parse(responseText);
+      setAiGeneratedSummary(responseObject);
+    } catch (error) {
+      console.error('Error in generateSummary: ', error);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong while generating the summary.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSummarySelect = (summary: string) => {
+    setContent(summary);
+    setAiGeneratedSummary(undefined);
+  };
 
   const handleEditSubmit = useCallback(async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -355,18 +430,49 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
                 config={config}
               />
             </div>
+            <div>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={generateExperienceSummary}
+                disabled={loading}
+              >
+                {loading ? (
+                  <LoaderCircle className='animate-spin' size='15px' />
+                ) : (
+                  <Sparkles className='text-primary' size='15px' />
+                )}
+                Generate with AI
+              </Button>
+            </div>
+            {aiGeneratedSummary && (
+              <div className='col-span-2'>
+                <div className='flex flex-col gap-3'>
+                  {aiGeneratedSummary.summaries.map((summary, index) => (
+                    <div
+                      key={index}
+                      className='border p-4 rounded-lg cursor-pointer hover:border-primary hover:shadow-sm transition-all bg-primary/5'
+                      onClick={() => handleSummarySelect(summary.data)}
+                    >
+                      <h5 className='font-bold text-lg'>{summary.level}</h5>
+                      <p className='text-sm'>{summary.data}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <Button
               disabled={
                 isPending || resumeInfo?.status === 'archived' ? true : false
               }
-              className=' dark:text-white ' type='submit'>
+              className=' dark:text-white mt-2 ' type='submit'>
               {isPending && <LoaderCircle className='animate-spin' size='15px' />}
               Add
             </Button>
           </form>
         </>
       ) : (
-        <div className='bg-primary/5 p-2 border border-primary rounded-lg' >
+        <div className='p-2 border rounded-lg'>
           <div className='w-full' >
             <h5 className='font-bold text-lg' >Edit Experience</h5>
           </div>
@@ -459,14 +565,45 @@ const ExperienceForm: FC<Prop> = ({ handleNext }) => {
                 config={config}
               />
             </div>
+            <div>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={generateExperienceSummary}
+                disabled={loading}
+              >
+                {loading ? (
+                  <LoaderCircle className='animate-spin' size='15px' />
+                ) : (
+                  <Sparkles className='text-primary' size='15px' />
+                )}
+                Generate with AI
+              </Button>
+            </div>
+            {aiGeneratedSummary && (
+              <div className='col-span-2'>
+                <div className='flex flex-col gap-3'>
+                  {aiGeneratedSummary.summaries.map((summary, index) => (
+                    <div
+                      key={index}
+                      className='border p-4 rounded-lg cursor-pointer hover:border-primary hover:shadow-sm transition-all bg-primary/5'
+                      onClick={() => handleSummarySelect(summary.data)}
+                    >
+                      <h5 className='font-bold text-lg'>{summary.level}</h5>
+                      <p className='text-sm'>{summary.data}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className='flex justify-start items-center gap-2' >
               <Button
                 disabled={
                   isPending || resumeInfo?.status === 'archived' ? true : false
                 }
-                className=' dark:text-white ' type='submit'>
+                className=' dark:text-white mt-2 ' type='submit'>
                 {isPending && <LoaderCircle className='animate-spin' size='15px' />}
-                Save Changes
+                Update Experience
               </Button>
               <Button onClick={() => {
                 setIsEdit(false)

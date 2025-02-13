@@ -329,16 +329,12 @@ const documentRoute = new Hono()
                 documentId: z.string(),
             })
         ),
-        getAuthUser,
         async (c) => {
             try {
-                const user = c.get('user')
-                const userId = user?.id
                 const { documentId } = c.req.valid('param')
 
                 const documentData = await db.query.documentTable.findFirst({
                     where: and(
-                        eq(documentTable.userId, userId),
                         eq(documentTable.documentId, documentId),
                     ),
                     with: {
